@@ -247,7 +247,9 @@ To deploy the pod, you will need to create an image containing the TensorFlow co
 
 ```
 cd ~/tensorflow-kubernetes-art-classification
-cp -r ~/data .
+mkdir data
+cp ~/data/*.tfrecord data/.
+cp ~/data/labels.txt data/.
 docker build -t my_image_name:v1 -f Dockerfile .
 ```
 
