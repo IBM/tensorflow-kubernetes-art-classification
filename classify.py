@@ -31,10 +31,10 @@ tf.app.flags.DEFINE_string(
     'image_file', '', 'The name of the image to run an inference.')
 
 tf.app.flags.DEFINE_integer(
-    'batch_size', 100, 'The number of samples in each batch.')
+    'batch_size', 1, 'The number of samples in each batch.')
 
 tf.app.flags.DEFINE_integer(
-    'max_num_batches', None,
+    'max_num_batches', 1,
     'Max number of batches to evaluate by default use all.')
 
 tf.app.flags.DEFINE_string(
@@ -53,7 +53,7 @@ tf.app.flags.DEFINE_integer(
     'The number of threads used to create the batches.')
 
 tf.app.flags.DEFINE_string(
-    'dataset_name', 'imagenet', 'The name of the dataset to load.')
+    'dataset_name', 'arts', 'The name of the dataset to load.')
 
 tf.app.flags.DEFINE_string(
     'dataset_split_name', 'test', 'The name of the train/test split.')
@@ -80,7 +80,7 @@ tf.app.flags.DEFINE_float(
     'If left as None, then moving averages are not used.')
 
 tf.app.flags.DEFINE_integer(
-    'eval_image_size', 100, 'Eval image size')
+    'eval_image_size', 299, 'Eval image size')
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -116,7 +116,7 @@ def main(_):
         is_training=False)
 
     eval_image_size = FLAGS.eval_image_size or network_fn.default_image_size
-    image_data_0 = tf.placeholder(tf.string, [])
+    image_data_0 = tf.gfile.FastGFile(FLAGS.image_file, 'rb').read()
     image_0 = tf.image.decode_jpeg(image_data_0, channels=3)
     image = image_preprocessing_fn(image_0, eval_image_size, eval_image_size)
     label = 0
@@ -139,7 +139,7 @@ def main(_):
         variables_to_restore = slim.get_variables_to_restore()
 
     predictions = tf.argmax(logits, 1)
-    
+
     num_batches = 1
         
     if tf.gfile.IsDirectory(FLAGS.checkpoint_path):
@@ -149,14 +149,12 @@ def main(_):
 
     tf.logging.info('Restoring model checkpoint %s' % checkpoint_path)
     
-    raw_image_data = tf.gfile.FastGFile(FLAGS.image_file, 'rb').read()
     answer = slim.evaluation.evaluate_once(
         master=FLAGS.master,
         checkpoint_path=checkpoint_path,
         logdir=FLAGS.eval_dir,
         num_evals=num_batches,
         final_op=predictions,
-        final_op_feed_dict={image_data_0: raw_image_data},
         variables_to_restore=variables_to_restore)
     
     label_name = dataset.labels_to_names.get(answer[0])
