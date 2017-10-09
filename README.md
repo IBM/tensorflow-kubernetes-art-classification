@@ -1,6 +1,6 @@
 # Train a TensorFlow model on Kubernetes to recognize art culture based on the collection from the Metropolitan Museum of Art
 
-In this developer journey, we will use Deep Learning to train an image classification model. 
+In this developer journey, we will use Deep Learning to train an image classification model.
 The data comes from the art collection at the New York Metropolitan Museum of Art and the metadata from Google BigQuery.
 We will use the Inception model implemented in TensorFlow and we will run the training on a Kubernetes cluster.  
 We will save the trained model and load it later to perform inference.  
@@ -22,9 +22,9 @@ When the reader has completed this journey, they will understand how to:
 
 ## Flow
 
-1. Inspect the available attributes in the Google BigQuery database for the Met art collection 
+1. Inspect the available attributes in the Google BigQuery database for the Met art collection
 2. Create the labeled dataset using the attribute selected
-3. Select a model for image classification from the set of available public models and deploy to IBM Bluemix 
+3. Select a model for image classification from the set of available public models and deploy to IBM Bluemix
 4. Run the training on Kubernetes, optionally using GPU if available
 5. Save the trained model and logs
 6. Visualize the training with TensorBoard
@@ -37,15 +37,15 @@ When the reader has completed this journey, they will understand how to:
 * [Image classification models](https://github.com/tensorflow/models/tree/master/slim): an implementation of the Inception neural network for image classification
 * [Google metadata for Met Art collection](https://bigquery.cloud.google.com/dataset/bigquery-public-data:the_met?pli=1): a database containing metadata for the art collection at the New York Metropolitan Museum of Art
 * [Met Art collection](link): a collection of over 200,000 public art artifacts, including paintings, books, etc.
-* [Kubernetes cluster](https://kubernetes.io): an open-source system for orchestrating containers on a cluster of servers 
-* [IBM Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter): a public service from IBM that hosts users applications on Docker and Kubernetes 
+* [Kubernetes cluster](https://kubernetes.io): an open-source system for orchestrating containers on a cluster of servers
+* [IBM Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter): a public service from IBM that hosts users applications on Docker and Kubernetes
 
 
 ## Featured technologies
 
 * [TensorFlow](https://www.tensorflow.org): Deep Learning library
 * [TensorFlow models](https://github.com/tensorflow/models/tree/master/slim): public models for Deep Learning
-* [Kubernetes]():  Container orchestration 
+* [Kubernetes]():  Container orchestration
 
 # Watch the Video
 [![](http://img.youtube.com/vi/Jxi7U7VOMYg/0.jpg)](https://www.youtube.com/watch?v=Jxi7U7VOMYg)
@@ -63,7 +63,7 @@ When the reader has completed this journey, they will understand how to:
 9. [Load the trained model in Kubernetes and run an inference on a new art drawing](#9-run-inference)
 
 
-### 1. Set up environment 
+### 1. Set up environment
 
 Refer to the [instruction](https://cloud.google.com/bigquery/docs/reference/libraries) to install the client on your laptop to interact with Google BigQuery,   
 
@@ -83,7 +83,7 @@ Unpack and run the command:
 	./google-cloud-sdk/bin/gcloud init
 ```
 
-This will start the browser and request you to log into your gmail account and ask you to choose a project 
+This will start the browser and request you to log into your gmail account and ask you to choose a project
 in Google cloud.
 
 Authenticate for the client on your laptop by this command:
@@ -97,14 +97,14 @@ Your laptop should be ready to interface with Google BigQuery.
 
 ### 2. Create label
 
-A labeled dataset is the first requirement for training a model.  Collecting the data and associating label to the data typically 
+A labeled dataset is the first requirement for training a model.  Collecting the data and associating label to the data typically
 requires a lot of resources and effort.
 
-Google BigQuery contains a collection of public databases that are useful for various purposes.  For our case, we are interested 
+Google BigQuery contains a collection of public databases that are useful for various purposes.  For our case, we are interested
 in the data for the [art collection at the Metropolitan Museum](https://bigquery.cloud.google.com/table/bigquery-public-data:the_met.objects?pli=1)
-Check this [blog] (https://cloud.google.com/blog/big-data/2017/08/when-art-meets-big-data-analyzing-200000-items-from-the-met-collection-in-bigquery) 
+Check this [blog] (https://cloud.google.com/blog/big-data/2017/08/when-art-meets-big-data-analyzing-200000-items-from-the-met-collection-in-bigquery)
 for more details.  Looking at the tables, we see quite a few attributes that can be used to label the art data.  
-For this journey, we will select the "culture" attribute, which describes the name of the culture where the art item 
+For this journey, we will select the "culture" attribute, which describes the name of the culture where the art item
 is originated from, for instance "Italian Florence".  Based on the example from this journey, you can choose any other
 attribute to label the art images.
 
@@ -112,7 +112,7 @@ The file bigquery.py provides a simple python script that will query the Google 
 To get a list of the unique cultures, the SQL string is:
 
 ```
-SELECT culture, COUNT(*) c 
+SELECT culture, COUNT(*) c
         FROM `bigquery-public-data.the_met.objects`
         GROUP BY 1
         ORDER BY c DESC
@@ -128,14 +128,15 @@ SELECT department, culture, link_resource
 ```
 
 You can enter these strings on the Google BigQuery console to see the data.
-The journey also provides convenient script to query the attributes. 
+The journey also provides convenient script to query the attributes.
 First clone the journey git repository:
 
 ```
+cd ~
 git clone https://github.com/IBM/tensorflow-kubernetes-art-classification.git
 ```
 
-The script to query Google BigQuery is bigquery.py. 
+The script to query Google BigQuery is bigquery.py.
 Edit the script to put the appropriate SQL string and run the script:
 
 ```
@@ -153,22 +154,23 @@ following files:
 ### 3. Download data
 
 Although the Google BigQuery holds the attributes, the photos of the art collection are actually kept at a site
-from the Metropolitan Museum of Art.  Therefore, to build our labeled dataset, we will need to download the photos 
-and associate them with the labels.  Looking at the list of art items, there are some 114,627 items with labels 
-that we can use.  There are 4,259 unique labels for these items, although only 540 labels have more than 10 photos and 
+from the Metropolitan Museum of Art.  Therefore, to build our labeled dataset, we will need to download the photos
+and associate them with the labels.  Looking at the list of art items, there are some 114,627 items with labels
+that we can use.  There are 4,259 unique labels for these items, although only 540 labels have more than 10 photos and
 would be useful for training a model.  If a particular culture has just a few art images, it's probably not enough
-to train the model 
+to train the model
 
 The script download.py is provided to build the raw labeled data.  It will read from the file arts-select.list,
 download the image source found in each line and place it in a directory named with the label.
 You can copy from the lines from the file `arts-all.list` into the file `arts-select.list` and edit as needed
-to create a list of images to download. 
+to create a list of images to download.
 
 ```
 python download.py
 ```
 
-
+Note if disk space is a concern to you or you would like to use IBM Bluemix Kubernetes Service(Lite),
+you can just unzip sample-dataset.tar.gz and use that as your downloaded data
 
 ### 4. Convert data
 
@@ -183,22 +185,24 @@ git clone https://github.com/tensorflow/models.git
 ```
 
 We will use and extend the collection of image classification models in the directory `models/slim`.
-The code provided in this directory will allow you to process several different image datasets 
+The code provided in this directory will allow you to process several different image datasets
 (CIFAR, Flowers, ImageNet) and you can choose from several advanced models to train.  
 To extend this code base to process our new dataset of art images, copy the following files into the
 directory:
 
 ```
-cp tensorflow-kubernetes-art-classification/dataset_factory.py models/slim/datasets/dataset_factory.py
-cp tensorflow-kubernetes-art-classification/arts.py models/slim/datasets/arts.py 
+cp tensorflow-kubernetes-art-classification/dataset_factory.py models/research/slim/datasets/dataset_factory.py
+cp tensorflow-kubernetes-art-classification/arts.py models/research/slim/datasets/arts.py
 ```
 
 We will convert the raw images into the TFRecord format that the TensorFlow code will use.
-To convert the art dataset, put the directories of downloaded pictures in a directory named `met_art`, 
+To convert the art dataset, put the directories of downloaded pictures in a directory named `met_art`,
 for instance `~/data/met_art`.
 Run the script:
 
 ```
+cp tensorflow-kubernetes-art-classification/convert.py models/research/slim/convert.py
+cd models/research/slim
 python3 convert.py --dataset_dir="~/data"
 ```
 
@@ -231,59 +235,91 @@ python3 convert.py --dataset_dir="~/data" --check_image=True
 
 Then the corrupted images can be removed from the dataset.
 
-
 ### 5. Create Kubernetes cluster
 
-Register for a free account at the [IBM Bluemix Kubernetes service](https://console.bluemix.net). 
+Register for a free account at the [IBM Bluemix Kubernetes service](https://console.bluemix.net).
 Create a Kubernetes cluster following the [instruction](https://console.bluemix.net/docs/containers/container_index.html#clusters)
-Select the Lite version and download the Bluemix cli and kubectl package for interfacing with your cluster.
+Select the Lite version and follow the on screen instruction to gain access to your cluster
 
-### 6. Deploy training 
+### 6. Deploy training
 
-Initialize your Bluemix Container Plug-in and set your terminal context to your Kubernetes cluster
 To deploy the pod, you will need to create an image containing the TensorFlow code by running the command:
 
 ```
-docker build -t my_image_name:v1 -f Dockerfile
-``` 
+cd ~/tensorflow-kubernetes-art-classification
+cp -r ~/data .
+docker build -t my_image_name:v1 -f Dockerfile .
+```
 
-Note that we include a small sample copy of the dataset in this image.  The reason is twofold.  First, shared 
-filesystem is not available for the free Bluemix account.  In normal practice, the dataset is too large to copy into the image and 
+Note that we include a small sample copy of the dataset in this image.  The reason is twofold.  First, shared
+filesystem is not available for the free Bluemix account.  In normal practice, the dataset is too large to copy into the image and
 you would keep the dataset in a shared filesystem such as SoftLayer NFS.  When a pod is started, the shared filesystem
 would be mounted so that the dataset is available to all the pods.
 Second, the computation resource provided with the free Bluemix account is not sufficient to run the training
-within a reasonable amount of time.  In practice, you would use a larger dataset and allocate sufficient resources 
+within a reasonable amount of time.  In practice, you would use a larger dataset and allocate sufficient resources
 such as multiple CPU cores and GPU.  Depending on the amount of computation resources, the training can run for days
 or over a week.
- 
-Create a namespace on Bluemix and [add this image] 
-(https://console.bluemix.net/docs/services/Registry/registry_setup_cli_namespace.html#registry_namespace_add)
-to the namespace . 
 
-Next, create a [Kubernetes secret]
-(https://console.bluemix.net/docs/services/Registry/ registry_tokens.html#registry_tokens)
-to store the Bluemix token information.  Add the Kubernetes secret to the template yaml file:
+Next follow this [instructions](https://console.bluemix.net/docs/containers/cs_cluster.html#bx_registry_other) to
+  1. create a namespace in Bluemix Container Registry and upload the image to this namespace
+	2. create a non-expiring registry token
+	3. create a Kubernetes secret to store the Bluemix token information
+
+Update met-art.yaml file with your images name and secret name
 
 ```
 apiVersion: v1
 kind: Pod
 metadata:
-name: <pod_name> spec:
-containers:
-- name: <container_name>
-image: registry.<region>.bluemix.net/<my_namespace>/<my_image>:<tag> imagePullSecrets:
-- name: <secret_name>
+  name: met-art
+spec:
+  containers:
+  - name: tensorflow
+    image: registry.ng.bluemix.net/tf_ns/met-art:v1
+    volumeMounts:
+    - name: model-logs
+      mountPath: /logs
+    ports:
+    - containerPort: 5000
+    command:
+    - "/usr/bin/python"
+    - "/model/train_image_classifier.py"
+    args:
+    - "--train_dir=/logs"
+    - "--dataset_name=arts"
+    - "--dataset_split_name=train"
+    - "--dataset_dir=/data"
+    - "--model_name=inception_v3"
+    - "--clone_on_cpu=True"
+    - "--max_number_of_steps=100"
+  volumes:
+  - name: model-logs
+    persistentVolumeClaim:
+      claimName: met-art-logs
+	imagePullSecrets:
+	- name: bluemix-token
+  restartPolicy: Never
 ```
 
-Deploy the pod with the command:
+```
+# For Mac OS
+sed -i '.original' 's/registry.ng.bluemix.net\/tf_ns\/met-art:v1/registry.<region>.bluemix.net\/<my_namespace>\/<my_image>:<tag>/' met-art.yaml
+sed -i '.original' 's/bluemix-token/<my_token>/' met-art.yaml
+# For all other Linux platforms
+sed -i 's/registry.ng.bluemix.net\/tf_ns\/met-art:v1/registry.<region>.bluemix.net\/<my_namespace>\/<my_image>:<tag>/' met-art.yaml
+sed -i 's/bluemix-token/<my_token>/' met-art.yaml
+```
+
+Deploy the pod with the following command:
 
 ```
-kubectl create -f <my_yaml>
+kubectl create -f met-art.yaml
 ```
 
 Along with the pod, a local volume will be created and mounted to the pod to hold the output of the training.
-This includes the checkpoints, which are used for resuming after a crash and saving a trained model, 
-and the event file, which is used for visualization.
+This includes the checkpoints, which are used for resuming after a crash and saving a trained model,
+and the event file, which is used for visualization. Further, the restart policy for the pod is set to "Never",
+because once the training complete there is no need to restart the pod again.
 
 
 ### 7. Save trained model
@@ -307,8 +343,8 @@ Then open your browser with the link displayed from the command.
 ### 9. Run inference
 
 Now that you have trained a model to classify art image by culture, you can provide
-a new art image to see how it will be classified by the model. 
-In the training we have run above, we used a very small dataset for illustration purpose because of the 
+a new art image to see how it will be classified by the model.
+In the training we have run above, we used a very small dataset for illustration purpose because of the
 very limited resources provided with the Lite version of the Kubernetes cluster.  Therefore
 the trained model only cover some 5 culture categories and will not be very accurate.  For this step,
 we use a saved model from a previous training that will cover some 600 culture categories.

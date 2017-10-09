@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: persistent-volume-1
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /tmp/data/pv-1
+  persistentVolumeReclaimPolicy: Retain
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: met-art-logs
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+     requests:
+       storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: met-art
+spec:
+  selector:
+    name: met-art
+  ports:
+  - port: 5000
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: met-art
+spec:
+  containers:
+  - name: tensorflow
+    image: registry.ng.bluemix.net/tf_ns/met-art:v1
+    volumeMounts:
+    - name: model-logs
+      mountPath: /logs
+    ports:
+    - containerPort: 5000
+    command:
+    - "/usr/bin/python"
+    - "/model/train_image_classifier.py"
+    args:
+    - "--train_dir=/logs"
+    - "--dataset_name=arts"
+    - "--dataset_split_name=train"
+    - "--dataset_dir=/data"
+    - "--model_name=inception_v3"
+    - "--clone_on_cpu=True"
+    - "--max_number_of_steps=100"
+  volumes:
+  - name: model-logs
+    persistentVolumeClaim:
+      claimName: met-art-logs
+  imagePullSecrets:
+  - name: bluemix-token
+  restartPolicy: Never
