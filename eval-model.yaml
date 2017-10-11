@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: eval-met-art-model
+spec:
+  selector:
+    name: eval-met-art-model
+  ports:
+  - port: 5000
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: eval-met-art-model
+spec:
+  containers:
+  - name: tensorflow
+    image: registry.ng.bluemix.net/tf_ns/met-art:v1
+    volumeMounts:
+    - name: model-logs
+      mountPath: /logs
+    ports:
+    - containerPort: 5000
+    command:
+    - "/usr/bin/python"
+    - "/model/eval_image_classifier.py"
+    args:
+    - "--alsologtostderr"
+    - "--checkpoint_path=/logs/model.ckpt-100"
+    - "--eval_dir=/logs"
+    - "--dataset_dir=/data"
+    - "--dataset_name=arts"
+    - "--dataset_split_name=validation"
+    - "--model_name=inception_v3"
+    - "--batch_size=10"
+  volumes:
+  - name: model-logs
+    persistentVolumeClaim:
+      claimName: met-art-logs
+  imagePullSecrets:
+  - name: bluemix-secret
+  restartPolicy: Never

@@ -127,17 +127,15 @@ SELECT department, culture, link_resource
         LIMIT 200
 ```
 
-You can enter these strings on the Google BigQuery console to see the data.
-The journey also provides convenient script to query the attributes.
-First clone the journey git repository:
+You can enter these strings on the Google BigQuery console to see the data. The journey also provides convenient script
+to query the attributes. First clone the journey git repository:
 
 ```
 cd ~
 git clone https://github.com/IBM/tensorflow-kubernetes-art-classification.git
 ```
 
-The script to query Google BigQuery is bigquery.py.
-Edit the script to put the appropriate SQL string and run the script:
+The script to query Google BigQuery is bigquery.py. Edit the script to put the appropriate SQL string and run the script:
 
 ```
 cd tensorflow-kubernetes-art-classification
@@ -262,12 +260,12 @@ within a reasonable amount of time.  In practice, you would use a larger dataset
 such as multiple CPU cores and GPU.  Depending on the amount of computation resources, the training can run for days
 or over a week.
 
-Next follow this [instructions](https://console.bluemix.net/docs/containers/cs_cluster.html#bx_registry_other) to
+Next follow these [instructions](https://console.bluemix.net/docs/containers/cs_cluster.html#bx_registry_other) to
   1. create a namespace in Bluemix Container Registry and upload the image to this namespace
 	2. create a non-expiring registry token
 	3. create a Kubernetes secret to store the Bluemix token information
 
-Update met-art.yaml file with your images name and secret name
+Update train-model.yaml file with your images name and secret name
 
 ```
 apiVersion: v1
@@ -299,23 +297,29 @@ spec:
     persistentVolumeClaim:
       claimName: met-art-logs
 	imagePullSecrets:
-	- name: bluemix-token
+	- name: bluemix-secret
   restartPolicy: Never
 ```
 
 ```
 # For Mac OS
-sed -i '.original' 's/registry.ng.bluemix.net\/tf_ns\/met-art:v1/registry.<region>.bluemix.net\/<my_namespace>\/<my_image>:<tag>/' met-art.yaml
-sed -i '.original' 's/bluemix-token/<my_token>/' met-art.yaml
+sed -i '.original' 's/registry.ng.bluemix.net\/tf_ns\/met-art:v1/registry.<region>.bluemix.net\/<my_namespace>\/<my_image>:<tag>/' train-model.yaml
+sed -i '.original' 's/bluemix-secret/<my_token>/' train-model.yaml
 # For all other Linux platforms
-sed -i 's/registry.ng.bluemix.net\/tf_ns\/met-art:v1/registry.<region>.bluemix.net\/<my_namespace>\/<my_image>:<tag>/' met-art.yaml
-sed -i 's/bluemix-token/<my_token>/' met-art.yaml
+sed -i 's/registry.ng.bluemix.net\/tf_ns\/met-art:v1/registry.<region>.bluemix.net\/<my_namespace>\/<my_image>:<tag>/' train-model.yaml
+sed -i 's/bluemix-secret/<my_token>/' train-model.yaml
 ```
 
 Deploy the pod with the following command:
 
 ```
-kubectl create -f met-art.yaml
+kubectl create -f train-model.yaml
+```
+
+Check the training status with the following command:
+
+```
+kubectl logs train-met-art-model
 ```
 
 Along with the pod, a local volume will be created and mounted to the pod to hold the output of the training.
@@ -323,15 +327,68 @@ This includes the checkpoints, which are used for resuming after a crash and sav
 and the event file, which is used for visualization. Further, the restart policy for the pod is set to "Never",
 because once the training complete there is no need to restart the pod again.
 
+### 7. Evaluate model performance
 
-### 7. Save trained model
+Evaluate the model from the last checkpoint in the training step above
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: eval-met-art-model
+spec:
+  containers:
+  - name: tensorflow
+    image: registry.ng.bluemix.net/tf_ns/met-art:v1
+    volumeMounts:
+    - name: model-logs
+      mountPath: /logs
+    ports:
+    - containerPort: 5000
+    command:
+    - "/usr/bin/python"
+    - "/model/eval_image_classifier.py"
+    args:
+    - "--alsologtostderr"
+    - "--checkpoint_path=/logs/model.ckpt-100"
+    - "--eval_dir=/logs"
+    - "--dataset_dir=/data"
+    - "--dataset_name=arts"
+    - "--dataset_split_name=validation"
+    - "--model_name=inception_v3"
+    - "--clone_on_cpu=True"
+    - "--batch_size=10"
+  volumes:
+  - name: model-logs
+    persistentVolumeClaim:
+      claimName: met-art-logs
+  imagePullSecrets:
+  - name: bluemix-secret
+  restartPolicy: Never
+```
+Update eval-model.yaml file with your images name and secret name just like in step 6
+
+Deploy the pod with the following command:
+
+```
+kubectl create -f eval-model.yaml
+```
+
+Check the evaluation status with the following command:
+
+```
+kubectl logs eval-met-art-model
+```
+
+
+### 8. Save trained model
 
 Copy the files from the Kubernetes local volume.
 
 The trained model is the last checkpoint file.
 
 
-### 8. Visualize
+### 9. Visualize
 
 The event file copied from the Kubernetes local volume contains the log data for TensorBoard.
 Start the TensorBoard and point to the local directory with the event file:
@@ -342,7 +399,7 @@ tensorboard --logdir=<path_to_dir>
 
 Then open your browser with the link displayed from the command.
 
-### 9. Run inference
+### 10. Run inference
 
 Now that you have trained a model to classify art image by culture, you can provide
 a new art image to see how it will be classified by the model.

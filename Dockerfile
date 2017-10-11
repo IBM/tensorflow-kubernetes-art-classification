@@ -7,11 +7,11 @@ RUN apt-get update && \
     mkdir /model /data && \
     git clone https://github.com/tensorflow/models.git && \
     cp -r /models/research/slim/* /model/ && \
-    rm -rf /models  
+    rm -rf /models
 
 COPY dataset_factory.py /model/datasets/.
-COPY arts.py /model/datasets/. 
-COPY data/*.tfrecord /data/
-COPY data/labels.txt /data/.
+COPY arts.py /model/datasets/.
+COPY classify.py /model/.
+COPY data/ /data/
 
 ENTRYPOINT ["python", "/model/train_image_classifier.py"]
