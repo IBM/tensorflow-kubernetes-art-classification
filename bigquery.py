@@ -1,5 +1,4 @@
 
-
 """Simple application that performs a query with BigQuery."""
 
 import uuid
@@ -13,11 +12,9 @@ def query_metart():
 
     query_job = client.run_async_query(str(uuid.uuid4()), """
         #standardSQL
-        SELECT culture, COUNT(*) c 
+        SELECT department, culture, link_resource
         FROM `bigquery-public-data.the_met.objects`
-        GROUP BY 1
-        ORDER BY c DESC""")
-
+        WHERE culture IS NOT NULL""")
 
     query_job.begin()
     query_job.result()  # Wait for job to complete.
