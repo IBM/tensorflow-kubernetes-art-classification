@@ -2,7 +2,6 @@ import os, errno
 from HTMLParser import HTMLParser
 import urllib2
 
-CULTURES_LIST = 'cultures-select.list'
 ARTS_LIST = 'arts-select.list'
 NUMBER_TO_DOWNLOAD = 100     # set to -1 to download all
 
@@ -18,11 +17,6 @@ class MetArtHTMLParser(HTMLParser):
                     art_url = attr[1].split("'")[1]
                     # Return the URL to download the original image
                     self.data = art_url
-
-with open(CULTURES_LIST) as f:
-    cultures_to_download = f.readlines()
-    cultures_to_download = [x.strip() for x in cultures_to_download]
-    f.close()
 
 with open(ARTS_LIST) as f:
     arts_to_download = f.readlines()
@@ -50,7 +44,7 @@ for item in arts_to_download:
         # (remove characters that are not valid for directory name)
         culture = culture.replace(",", "")
         culture = culture.replace("/", " ")
-        download_dir = 'data/' + culture
+        download_dir = 'data/met_art/' + culture
         try: 
             os.makedirs(download_dir)
         except OSError as e:
