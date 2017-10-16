@@ -20,6 +20,17 @@ When the reader has completed this journey, they will understand how to:
 
 ![](doc/source/images/architecture.png)
 
+
+## Prerequisite
+
+Create a Kubernetes cluster with either:
+* [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing
+* [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template) to deploy in cloud, or
+* [IBM Cloud Private](https://www.ibm.com/cloud-computing/products/ibm-cloud-private/) for either senario.
+For deploying on IBM Cloud Private follow the instructions [here](docs/deploy-with-ICP.md)
+The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
+
+
 ## Flow
 
 1. Inspect the available attributes in the Google BigQuery database for the Met art collection
@@ -56,7 +67,7 @@ When the reader has completed this journey, they will understand how to:
 2. [Create the label for the dataset](#2-create-label)
 3. [Download the data](#3-download-data)
 4. [Convert the data to TFRecord format](#4-convert-data)
-5. [Create a Kubernetes cluster on IBM Bluemix](#5-create-kubernetes-cluster)
+5. [Create TensorFlow container image](#5-create-image)
 6. [Deploy the TensorFlow pods to run the training on Kubernetes](#6-deploy-training)
 7. [Save the trained model and logs](#7-save-trained-model)
 8. [Visualize the training with TensorBoard](#8-visualize)
@@ -65,7 +76,8 @@ When the reader has completed this journey, they will understand how to:
 
 ### 1. Set up environment
 
-Refer to the [instruction](https://cloud.google.com/bigquery/docs/reference/libraries) to install the client on your laptop to interact with Google BigQuery,   
+Refer to the [instruction](https://cloud.google.com/bigquery/docs/reference/libraries) to install the client on your
+laptop to interact with Google BigQuery,   
 
 ```
 	pip install --upgrade google-cloud-bigquery
@@ -170,6 +182,7 @@ python download.py
 Note if disk space is a concern to you or you would like to use IBM Bluemix Kubernetes Service(Lite),
 you can just unzip sample-dataset.tar.gz and use that as your downloaded data
 
+
 ### 4. Convert data
 
 At this point, we will begin to use TensorFlow code to process the data.  
@@ -221,8 +234,8 @@ labels.txt
 ```
 
 Note that the data has been divided into two sets:  one for training and one for validation.  The portion
-of data set aside for validation is 25% and this can be changed in the script convert.py.  The file `labels.txt`
-lists all the culture label found in the images directory.
+of data set aside for validation is 25% and this can be changed in the script convert.py.  The file
+`labels.txt` lists all the culture label found in the images directory.
 
 Occasionally, an image file is corrupted and the image processing step in the conversion would fail.  
 You can scan the image collection first for corrupted files by running the command:
@@ -233,13 +246,8 @@ python3 convert.py --dataset_dir="~/data" --check_image=True
 
 Then the corrupted images can be removed from the dataset.
 
-### 5. Create Kubernetes cluster
 
-Register for a free account at the [IBM Bluemix Kubernetes service](https://console.bluemix.net).
-Create a Kubernetes cluster following the [instruction](https://console.bluemix.net/docs/containers/container_index.html#clusters)
-Select the Lite version and follow the on screen instruction to gain access to your cluster
-
-### 6. Deploy training
+### 5. Create image
 
 To deploy the pod, you will need to create an image containing the TensorFlow code by running the command:
 
@@ -251,21 +259,23 @@ cp ~/data/labels.txt data/.
 docker build -t my_image_name:v1 -f Dockerfile .
 ```
 
-Note that we include a small sample copy of the dataset in this image.  The reason is twofold.  First, shared
-filesystem is not available for the free Bluemix account.  In normal practice, the dataset is too large to copy into the image and
-you would keep the dataset in a shared filesystem such as SoftLayer NFS.  When a pod is started, the shared filesystem
-would be mounted so that the dataset is available to all the pods.
-Second, the computation resource provided with the free Bluemix account is not sufficient to run the training
-within a reasonable amount of time.  In practice, you would use a larger dataset and allocate sufficient resources
-such as multiple CPU cores and GPU.  Depending on the amount of computation resources, the training can run for days
-or over a week.
+Note that we include a small sample copy of the dataset in this image.  The reason is twofold. First, shared
+filesystem is not available for the free Bluemix account.  In normal practice, the dataset is too large to copy
+into the image and you would keep the dataset in a shared filesystem such as SoftLayer NFS. When a pod is started,
+the shared filesystem would be mounted so that the dataset is available to all the pods. Second, the computation
+resource provided with the free Bluemix account is not sufficient to run the training within a reasonable amount of
+time. In practice, you would use a larger dataset and allocate sufficient resources such as multiple CPU cores and
+GPU. Depending on the amount of computation resources, the training can run for days or over a week.
 
 Next follow these [instructions](https://console.bluemix.net/docs/containers/cs_cluster.html#bx_registry_other) to
   1. create a namespace in Bluemix Container Registry and upload the image to this namespace
 	2. create a non-expiring registry token
 	3. create a Kubernetes secret to store the Bluemix token information
 
-Update train-model.yaml file with your images name and secret name
+
+### 6. Deploy training
+
+Update train-model.yaml file with your image name and secret name
 
 ```
 apiVersion: v1
@@ -323,9 +333,10 @@ kubectl logs train-met-art-model
 ```
 
 Along with the pod, a local volume will be created and mounted to the pod to hold the output of the training.
-This includes the checkpoints, which are used for resuming after a crash and saving a trained model,
-and the event file, which is used for visualization. Further, the restart policy for the pod is set to "Never",
-because once the training complete there is no need to restart the pod again.
+This includes the checkpoints, which are used for resuming after a crash and saving a trained model, and the
+event file, which is used for visualization. Further, the restart policy for the pod is set to "Never", because
+once the training complete there is no need to restart the pod again.
+
 
 ### 7. Evaluate model performance
 
@@ -366,7 +377,7 @@ spec:
   - name: bluemix-secret
   restartPolicy: Never
 ```
-Update eval-model.yaml file with your images name and secret name just like in step 6
+Update eval-model.yaml file with your image name and secret name just like in step 6
 
 Deploy the pod with the following command:
 
@@ -383,14 +394,20 @@ kubectl logs eval-met-art-model
 
 ### 8. Save trained model
 
-Copy the files from the Kubernetes local volume.
+Copy all the logs files on the Kubernetes persistent volume to your local host.
 
-The trained model is the last checkpoint file.
+```
+kubectl create -f access-model-logs.yaml
+kubectl cp access-model-logs:/logs <path_to_local_dir>
+```
+
+If disk space is a concern, then only copy the trained model which is the last checkpoint files.
+In addition, copy the event files for the next visualize step.
 
 
 ### 9. Visualize
 
-The event file copied from the Kubernetes local volume contains the log data for TensorBoard.
+The event file copied from the Kubernetes persistent volume contains the log data for TensorBoard.
 Start the TensorBoard and point to the local directory with the event file:
 
 ```
@@ -399,16 +416,67 @@ tensorboard --logdir=<path_to_dir>
 
 Then open your browser with the link displayed from the command.
 
+
 ### 10. Run inference
 
 Now that you have trained a model to classify art image by culture, you can provide
 a new art image to see how it will be classified by the model.
-In the training we have run above, we used a very small dataset for illustration purpose because of the
-very limited resources provided with the Lite version of the Kubernetes cluster.  Therefore
-the trained model only cover some 5 culture categories and will not be very accurate.  For this step,
-we use a saved model from a previous training that will cover some 600 culture categories.
-The model is included in the git repository.  
 
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: infer-met-art-model
+spec:
+  containers:
+  - name: tensorflow
+    image: registry.ng.bluemix.net/tf_ns/met-art:v1
+    volumeMounts:
+    - name: model-logs
+      mountPath: /logs
+    ports:
+    - containerPort: 5000
+    command:
+    - "/usr/bin/python"
+    - "/model/model/classify.py"
+    args:
+    - "--alsologtostderr"
+    - "--checkpoint_path=/logs/model.ckpt-100"
+    - "--eval_dir=/logs"
+    - "--dataset_dir=/data"
+    - "--dataset_name=arts"
+    - "--dataset_split_name=validation"
+    - "--model_name=inception_v3"
+    - "--image_url=https://images.metmuseum.org/CRDImages/dp/original/DP800938.jpg"
+  volumes:
+  - name: model-logs
+    persistentVolumeClaim:
+      claimName: met-art-logs
+  imagePullSecrets:
+  - name: bluemix-secret
+  restartPolicy: Never
+```
+
+Update infer-model.yaml file with your docker image name and secret name just like in step 6.
+In addition, replace the image_url with your choice of art image
+
+Deploy the pod with the following command:
+
+```
+kubectl create -f infer-model.yaml
+```
+
+Check the inference status with the following command:
+
+```
+kubectl logs infer-met-art-model
+```
+
+In the training we have run above, we used a very small dataset for illustration purpose because of the
+very limited resources provided with the Lite version of the Kubernetes cluster. Therefore the trained
+model only cover some 5 culture categories and will not be very accurate. For this step, you can use our
+saved model from a previous training that will cover some 600 culture categories. The model is included
+in the git repository.  
 
 
 # License
