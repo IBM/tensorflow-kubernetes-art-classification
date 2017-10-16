@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: access-model-logs
+spec:
+  containers:
+  - name: access-model-logs
+    image: ubuntu:latest
+    volumeMounts:
+    - name: model-logs
+      mountPath: /logs
+    args:
+    - "sleep"
+    - "9999"
+  volumes:
+  - name: model-logs
+    persistentVolumeClaim:
+      claimName: met-art-logs
+  restartPolicy: Never

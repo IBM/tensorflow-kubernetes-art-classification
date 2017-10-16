@@ -20,6 +20,7 @@ from __future__ import print_function
 
 import math
 import tensorflow as tf
+import urllib2
 
 from datasets import dataset_factory
 from nets import nets_factory
@@ -28,7 +29,7 @@ from preprocessing import preprocessing_factory
 slim = tf.contrib.slim
 
 tf.app.flags.DEFINE_string(
-    'image_file', '', 'The name of the image to run an inference.')
+    'image_url', '', 'The url of the image to run an inference.')
 
 tf.app.flags.DEFINE_integer(
     'batch_size', 1, 'The number of samples in each batch.')
@@ -92,7 +93,7 @@ def main(_):
   tf.logging.set_verbosity(tf.logging.INFO)
   with tf.Graph().as_default():
     tf_global_step = slim.get_or_create_global_step()
-    
+
     ######################
     # Select the dataset #
     ######################
@@ -116,7 +117,12 @@ def main(_):
         is_training=False)
 
     eval_image_size = FLAGS.eval_image_size or network_fn.default_image_size
-    image_data_0 = tf.gfile.FastGFile(FLAGS.image_file, 'rb').read()
+    try:
+        resp = urllib2.urlopen(FLAGS.image_url)
+        image_data_0 = resp.read()
+    except:
+        raise ValueError(
+            'The image url is invalid please verify the path and try again')
     image_0 = tf.image.decode_jpeg(image_data_0, channels=3)
     image = image_preprocessing_fn(image_0, eval_image_size, eval_image_size)
     label = 0
@@ -128,7 +134,7 @@ def main(_):
         capacity=5)
 
     logits, _ = network_fn(images)
-        
+
     if FLAGS.moving_average_decay:
         variable_averages = tf.train.ExponentialMovingAverage(
             FLAGS.moving_average_decay, tf_global_step)
@@ -141,14 +147,14 @@ def main(_):
     predictions = tf.argmax(logits, 1)
 
     num_batches = 1
-        
+
     if tf.gfile.IsDirectory(FLAGS.checkpoint_path):
         checkpoint_path = tf.train.latest_checkpoint(FLAGS.checkpoint_path)
     else:
         checkpoint_path = FLAGS.checkpoint_path
 
     tf.logging.info('Restoring model checkpoint %s' % checkpoint_path)
-    
+
     answer = slim.evaluation.evaluate_once(
         master=FLAGS.master,
         checkpoint_path=checkpoint_path,
@@ -156,9 +162,9 @@ def main(_):
         num_evals=num_batches,
         final_op=predictions,
         variables_to_restore=variables_to_restore)
-    
+
     label_name = dataset.labels_to_names.get(answer[0])
     print('Answer: %s' % label_name)
-    
+
 if __name__ == '__main__':
   tf.app.run()
