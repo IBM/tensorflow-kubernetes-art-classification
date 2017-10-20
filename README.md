@@ -70,9 +70,10 @@ The code here is regularly tested against [Kubernetes Cluster from Bluemix Conta
 4. [Convert the data to TFRecord format](#4-convert-data)
 5. [Create TensorFlow container image](#5-create-image)
 6. [Deploy the TensorFlow pods to run the training on Kubernetes](#6-deploy-training)
-7. [Save the trained model and logs](#7-save-trained-model)
-8. [Visualize the training with TensorBoard](#8-visualize)
-9. [Load the trained model in Kubernetes and run an inference on a new art drawing](#9-run-inference)
+7. [Evaluate the accuracy of the trained model](#7-evaluate-model)
+8. [Save the trained model and logs](#8-save-trained-model)
+9. [Visualize the training with TensorBoard](#9-visualize)
+10. [Load the trained model in Kubernetes and run an inference on a new art drawing](#10-run-inference)
 
 
 ### 1. Set up environment
@@ -339,7 +340,7 @@ event file, which is used for visualization. Further, the restart policy for the
 once the training complete there is no need to restart the pod again.
 
 
-### 7. Evaluate model performance
+### 7. Evaluate model 
 
 Evaluate the model from the last checkpoint in the training step above
 
