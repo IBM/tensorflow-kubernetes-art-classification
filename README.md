@@ -55,11 +55,12 @@ The code here is regularly tested against [Kubernetes Cluster from Bluemix Conta
 ## Featured technologies
 
 * [TensorFlow](https://www.tensorflow.org): Deep Learning library
-* [TensorFlow models](https://github.com/tensorflow/models/tree/master/slim): public models for Deep Learning
-* [Kubernetes]():  Container orchestration
+* [TensorFlow models](https://github.com/tensorflow/models/tree/master/research/slim): public models for Deep Learning
+* [Kubernetes](https://kubernetes.io):  Container orchestration
+* [IBM Bluemix](https://bluemix.net):  IBM Container service
 
 # Watch the Video
-[![](http://img.youtube.com/vi/Jxi7U7VOMYg/0.jpg)](https://www.youtube.com/watch?v=Jxi7U7VOMYg)
+[![](https://i.ytimg.com/vi/I-8xmMxo-RQ/2.jpg?time=1508459214123)](https://youtu.be/I-8xmMxo-RQ)
 
 
 # Steps
