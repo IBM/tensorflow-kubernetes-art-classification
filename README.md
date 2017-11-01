@@ -340,7 +340,7 @@ event file, which is used for visualization. Further, the restart policy for the
 once the training complete there is no need to restart the pod again.
 
 
-### 7. Evaluate model 
+### 7. Evaluate model
 
 Evaluate the model from the last checkpoint in the training step above
 
@@ -474,12 +474,48 @@ Check the inference status with the following command:
 kubectl logs infer-met-art-model
 ```
 
-In the training we have run above, we used a very small dataset for illustration purpose because of the
-very limited resources provided with the Lite version of the Kubernetes cluster. Therefore the trained
-model only cover some 5 culture categories and will not be very accurate. For this step, you can use our
-saved model from a previous training that will cover some 600 culture categories. The model is included
-in the git repository.  
+In the training we have run above, we used a very small dataset for illustration purpose because
+of the very limited resources provided with the Lite version of the Kubernetes cluster. Therefore
+the trained model only cover 5 culture categories and will not be very accurate. For this step,
+you can use our [checkpoint](https://ibm.box.com/s/wyzl1k2tz1nosrf44mj20cmlruy7gsut) from a previous training that cover
+600 culture categories. The accuracy at this checkpoint is 66%.
+If you would like to use our checkpoint to run inference please download it form the above link
+and then copy it to the Kubernetes persistent volume:
 
+```
+kubectl delete -f access-model-logs.yaml # in case the access pod already exist
+kubectl create -f access-model-logs.yaml
+kubectl cp inception-v3-2k-metart-images.tar.gz access-model-logs:/logs/.
+kubectl exec access-model-logs -ti /bin/bash
+cd /logs
+tar xvfz inception-v3-2k-metart-images.tar.gz
+exit
+```
+
+Next update infer-model.yaml with this checkpoint
+
+```
+command:
+- "/usr/bin/python"
+- "/model/model/classify.py"
+args:
+- "--alsologtostderr"
+- "--checkpoint_path=/logs/inception-v3-2k-metart-images/model.ckpt-15000"
+- "--eval_dir=/logs"
+- "--dataset_dir=/logs/inception-v3-2k-metart-images"
+- "--dataset_name=arts"
+- "--dataset_split_name=validation"
+- "--model_name=inception_v3"
+- "--image_url=https://images.metmuseum.org/CRDImages/dp/original/DP800938.jpg"
+```
+
+Finally run inference
+
+```
+kubectl delete -f infer-model.yaml # in case the infer pod already exist
+kubectl create -f infer-model.yaml
+kubectl logs infer-met-art-model
+```
 
 # License
 [Apache 2.0](LICENSE)

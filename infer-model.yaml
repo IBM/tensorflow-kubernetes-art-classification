@@ -23,7 +23,7 @@ spec:
     - containerPort: 5000
     command:
     - "/usr/bin/python"
-    - "/model/model/classify.py"
+    - "/model/classify.py"
     args:
     - "--alsologtostderr"
     - "--checkpoint_path=/logs/model.ckpt-100"

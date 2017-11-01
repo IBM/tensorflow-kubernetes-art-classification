@@ -31,6 +31,9 @@ slim = tf.contrib.slim
 tf.app.flags.DEFINE_string(
     'image_url', '', 'The url of the image to run an inference.')
 
+tf.app.flags.DEFINE_string(
+    'image_file', '', 'The name of the image to run an inference.')
+
 tf.app.flags.DEFINE_integer(
     'batch_size', 1, 'The number of samples in each batch.')
 
@@ -117,12 +120,19 @@ def main(_):
         is_training=False)
 
     eval_image_size = FLAGS.eval_image_size or network_fn.default_image_size
-    try:
-        resp = urllib2.urlopen(FLAGS.image_url)
-        image_data_0 = resp.read()
-    except:
+    if FLAGS.image_url:
+        try:
+            resp = urllib2.urlopen(FLAGS.image_url)
+            image_data_0 = resp.read()
+        except:
+            raise ValueError(
+                'The image url is invalid please verify the path and try again')
+    elif FLAGS.image_file:
+        image_data_0 = tf.gfile.FastGFile(FLAGS.image_file, 'rb').read()
+    else:
         raise ValueError(
-            'The image url is invalid please verify the path and try again')
+            'You must supply an image url or image file for inference')
+
     image_0 = tf.image.decode_jpeg(image_data_0, channels=3)
     image = image_preprocessing_fn(image_0, eval_image_size, eval_image_size)
     label = 0
@@ -134,6 +144,8 @@ def main(_):
         capacity=5)
 
     logits, _ = network_fn(images)
+
+    tf.summary.image('inference_image', images)
 
     if FLAGS.moving_average_decay:
         variable_averages = tf.train.ExponentialMovingAverage(
