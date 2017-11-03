@@ -24,11 +24,11 @@ When the reader has completed this journey, they will understand how to:
 ## Prerequisite
 
 Create a Kubernetes cluster with either:
-* [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing
-* [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template) to deploy in cloud, or
-* [IBM Cloud Private](https://www.ibm.com/cloud-computing/products/ibm-cloud-private/) for either senario.
-For deploying on IBM Cloud Private follow the instructions [here](docs/deploy-with-ICP.md)
-The code here is regularly tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) using Travis.
+* [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing using your own servers.
+* [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template) to deploy in cloud.
+* [IBM Cloud Private](https://www.ibm.com/cloud-computing/products/ibm-cloud-private/) for either scenario above.
+
+The code here is tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov).
 
 
 ## Flow
