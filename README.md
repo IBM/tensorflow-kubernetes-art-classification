@@ -82,19 +82,17 @@ Refer to the [instructions](https://cloud.google.com/bigquery/docs/reference/lib
 laptop to interact with Google BigQuery:
 
 ```
-pip install --upgrade google-cloud-bigquery
+$ pip install --upgrade google-cloud-bigquery
 ```
 
-Install the [Google Cloud SDK](https://cloud.google.com/sdk/docs/) on your laptop.  For example, on the Mac, download:
+Install the [Google Cloud SDK](https://cloud.google.com/sdk/docs/) on your laptop.
+
+> For example, on the Mac, download and unzip ` google-cloud-sdk-168.0.0-darwin-x86_64.tar.gz`.
+
+Run the command:
 
 ```
-google-cloud-sdk-168.0.0-darwin-x86_64.tar.gz
-```
-
-Unpack and run the command:
-
-```
-./google-cloud-sdk/bin/gcloud init
+$ ./google-cloud-sdk/bin/gcloud init
 ```
 
 This will start the browser and request you to log into your gmail account and ask you to choose a project
@@ -103,7 +101,7 @@ in Google cloud.
 Authenticate for the client on your laptop by this command:
 
 ```
-./google-cloud-sdk/bin/gcloud auth application-default login
+$ ./google-cloud-sdk/bin/gcloud auth application-default login
 ```
 
 Your laptop should be ready to interface with Google BigQuery.
@@ -125,7 +123,7 @@ attribute to label the art images.
 The file bigquery.py provides a simple python script that will query the Google BigQuery database.  
 To get a list of the unique cultures, the SQL string is:
 
-```
+```sql
 SELECT culture, COUNT(*) c
         FROM `bigquery-public-data.the_met.objects`
         GROUP BY 1
@@ -134,7 +132,7 @@ SELECT culture, COUNT(*) c
 
 To get a list of all art items labeled with the culture, the SQL string is:
 
-```
+```sql
 SELECT department, culture, link_resource
         FROM `bigquery-public-data.the_met.objects`
         WHERE culture IS NOT NULL
@@ -145,15 +143,15 @@ You can enter these strings on the Google BigQuery console to see the data. The 
 to query the attributes. First clone the journey git repository:
 
 ```
-cd ~
-git clone https://github.com/IBM/tensorflow-kubernetes-art-classification.git
+$ cd ~
+$ git clone https://github.com/IBM/tensorflow-kubernetes-art-classification.git
 ```
 
 The script to query Google BigQuery is bigquery.py. Edit the script to put in the appropriate SQL string and run the script:
 
 ```
-cd tensorflow-kubernetes-art-classification
-python bigquery.py
+$ cd tensorflow-kubernetes-art-classification
+$ python bigquery.py
 ```
 
 You can redirect the output to save to a file.  For reference, the output of the two queries above are provided in the
@@ -178,10 +176,10 @@ You can copy from the lines in the file `arts-all.list` into the file `arts-sele
 to create a list of images to download.
 
 ```
-python download.py
+$ python download.py
 ```
 
-Note if disk space is a concern to you, or you would like to use IBM Bluemix Kubernetes Service(Lite),
+> Note: If disk space is a concern to you, or you would like to use IBM Bluemix Kubernetes Service(Lite),
 you can just unzip sample-dataset.tar.gz and use that as your downloaded data.
 
 
@@ -193,8 +191,8 @@ Install TensorFlow on your environment following the [instructions from TensorFl
 Clone the TensorFlow git repository containing a collection of public models:
 
 ```
-cd ~
-git clone https://github.com/tensorflow/models.git
+$ cd ~
+$ git clone https://github.com/tensorflow/models.git
 ```
 
 We will use and extend the collection of image classification models in the directory `models/slim`.
@@ -204,8 +202,8 @@ To extend this code base to process our new dataset of art images, copy the foll
 directory:
 
 ```
-cp tensorflow-kubernetes-art-classification/dataset_factory.py models/research/slim/datasets/dataset_factory.py
-cp tensorflow-kubernetes-art-classification/arts.py models/research/slim/datasets/arts.py
+$ cp tensorflow-kubernetes-art-classification/dataset_factory.py models/research/slim/datasets/dataset_factory.py
+$ cp tensorflow-kubernetes-art-classification/arts.py models/research/slim/datasets/arts.py
 ```
 
 We will convert the raw images into the TFRecord format that the TensorFlow code will use.
@@ -214,9 +212,9 @@ for instance `~/data/met_art`.
 Run the script:
 
 ```
-cp tensorflow-kubernetes-art-classification/convert.py models/research/slim/convert.py
-cd models/research/slim
-python3 convert.py --dataset_dir="~/data"
+$ cp tensorflow-kubernetes-art-classification/convert.py models/research/slim/convert.py
+$ cd models/research/slim
+$ python3 convert.py --dataset_dir="~/data"
 ```
 
 The output will be in the directory `~/data`:
@@ -242,8 +240,8 @@ of data set aside for validation is 25% and this can be changed in the script co
 Occasionally, an image file is corrupted and the image processing step in the conversion would fail.  
 You can scan the image collection first for corrupted files by running the command:
 
-```
-python3 convert.py --dataset_dir="~/data" --check_image=True
+```sh
+$ python3 convert.py --dataset_dir="~/data" --check_image=True
 ```
 
 Then the corrupted images can be removed from the dataset.
@@ -254,11 +252,11 @@ Then the corrupted images can be removed from the dataset.
 To deploy the pod, you will need to create an image containing the TensorFlow code by running the command:
 
 ```
-cd ~/tensorflow-kubernetes-art-classification
-mkdir data
-cp ~/data/*.tfrecord data/.
-cp ~/data/labels.txt data/.
-docker build -t my_image_name:v1 -f Dockerfile .
+$ cd ~/tensorflow-kubernetes-art-classification
+$ mkdir data
+$ cp ~/data/*.tfrecord data/.
+$ cp ~/data/labels.txt data/.
+$ docker build -t my_image_name:v1 -f Dockerfile .
 ```
 
 Note that we include a small sample copy of the dataset in this image.  The reason is twofold. First, shared
@@ -277,9 +275,9 @@ Next follow these [instructions](https://console.bluemix.net/docs/containers/cs_
 
 ### 6. Deploy training
 
-Update train-model.yaml file with your image name and secret name:
+Update `train-model.yaml` file with your image name and secret name:
 
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -313,25 +311,26 @@ spec:
   restartPolicy: Never
 ```
 
-```
+```sh
 # For Mac OS
-sed -i '.original' 's/registry.ng.bluemix.net\/tf_ns\/met-art:v1/registry.<region>.bluemix.net\/<my_namespace>\/<my_image>:<tag>/' train-model.yaml
-sed -i '.original' 's/bluemix-secret/<my_token>/' train-model.yaml
+$ sed -i '.original' 's/registry.ng.bluemix.net\/tf_ns\/met-art:v1/registry.<region>.bluemix.net\/<my_namespace>\/<my_image>:<tag>/' train-model.yaml
+$ sed -i '.original' 's/bluemix-secret/<my_token>/' train-model.yaml
+
 # For all other Linux platforms
-sed -i 's/registry.ng.bluemix.net\/tf_ns\/met-art:v1/registry.<region>.bluemix.net\/<my_namespace>\/<my_image>:<tag>/' train-model.yaml
-sed -i 's/bluemix-secret/<my_token>/' train-model.yaml
+$ sed -i 's/registry.ng.bluemix.net\/tf_ns\/met-art:v1/registry.<region>.bluemix.net\/<my_namespace>\/<my_image>:<tag>/' train-model.yaml
+$ sed -i 's/bluemix-secret/<my_token>/' train-model.yaml
 ```
 
 Deploy the pod with the following command:
 
 ```
-kubectl create -f train-model.yaml
+$ kubectl create -f train-model.yaml
 ```
 
 Check the training status with the following command:
 
 ```
-kubectl logs train-met-art-model
+$ kubectl logs train-met-art-model
 ```
 
 Along with the pod, a local volume will be created and mounted to the pod to hold the output of the training.
@@ -344,7 +343,7 @@ once the training is complete there is no need to restart the pod again.
 
 Evaluate the model from the last checkpoint in the training step above:
 
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -379,18 +378,18 @@ spec:
   - name: bluemix-secret
   restartPolicy: Never
 ```
-Update eval-model.yaml file with your image name and secret name just like in step 6.
+Update `eval-model.yaml` file with your image name and secret name just like in step 6.
 
 Deploy the pod with the following command:
 
 ```
-kubectl create -f eval-model.yaml
+$ kubectl create -f eval-model.yaml
 ```
 
 Check the evaluation status with the following command:
 
 ```
-kubectl logs eval-met-art-model
+$ kubectl logs eval-met-art-model
 ```
 
 
@@ -399,8 +398,8 @@ kubectl logs eval-met-art-model
 Copy all the log files on the Kubernetes persistent volume to your local host.
 
 ```
-kubectl create -f access-model-logs.yaml
-kubectl cp access-model-logs:/logs <path_to_local_dir>
+$ kubectl create -f access-model-logs.yaml
+$ kubectl cp access-model-logs:/logs <path_to_local_dir>
 ```
 
 If disk space is a concern, then only copy the trained model which is the last checkpoint files.
@@ -413,7 +412,7 @@ The event file copied from the Kubernetes persistent volume contains the log dat
 Start the TensorBoard and point to the local directory with the event file:
 
 ```
-tensorboard --logdir=<path_to_dir>
+$ tensorboard --logdir=<path_to_dir>
 ```
 
 Then open your browser with the link displayed from the command.
@@ -424,7 +423,7 @@ Then open your browser with the link displayed from the command.
 Now that you have trained a model to classify art images by culture, you can provide
 a new art image to see how it will be classified by the model.
 
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -459,19 +458,19 @@ spec:
   restartPolicy: Never
 ```
 
-Update infer-model.yaml file with your docker image name and secret name just like in step 6.
+Update `infer-model.yaml` file with your docker image name and secret name just like in step 6.
 In addition, replace the image_url with your choice of art image.
 
 Deploy the pod with the following command:
 
 ```
-kubectl create -f infer-model.yaml
+$ kubectl create -f infer-model.yaml
 ```
 
 Check the inference status with the following command:
 
 ```
-kubectl logs infer-met-art-model
+$ kubectl logs infer-met-art-model
 ```
 
 In the training we have run above, we used a very small dataset for illustration purposes because
@@ -482,19 +481,19 @@ you can use our [checkpoint](https://ibm.box.com/s/wyzl1k2tz1nosrf44mj20cmlruy7g
 If you would like to use our checkpoint to run inference please download it from the above link
 and then copy it to the Kubernetes persistent volume:
 
-```
-kubectl delete -f access-model-logs.yaml # in case the access pod already exists
-kubectl create -f access-model-logs.yaml
-kubectl cp inception-v3-2k-metart-images.tar.gz access-model-logs:/logs/.
-kubectl exec access-model-logs -ti /bin/bash
-cd /logs
-tar xvfz inception-v3-2k-metart-images.tar.gz
-exit
+```sh
+$ kubectl delete -f access-model-logs.yaml # in case the access pod already exists
+$ kubectl create -f access-model-logs.yaml
+$ kubectl cp inception-v3-2k-metart-images.tar.gz access-model-logs:/logs/.
+$ kubectl exec access-model-logs -ti /bin/bash
+$ cd /logs
+$ tar xvfz inception-v3-2k-metart-images.tar.gz
+$ exit
 ```
 
 Next update infer-model.yaml with this checkpoint:
 
-```
+```yaml
 command:
 - "/usr/bin/python"
 - "/model/model/classify.py"
@@ -511,10 +510,10 @@ args:
 
 Finally run inference:
 
-```
-kubectl delete -f infer-model.yaml # in case the infer pod already exists
-kubectl create -f infer-model.yaml
-kubectl logs infer-met-art-model
+```sh
+$ kubectl delete -f infer-model.yaml # in case the infer pod already exists
+$ kubectl create -f infer-model.yaml
+$ kubectl logs infer-met-art-model
 ```
 
 # License
