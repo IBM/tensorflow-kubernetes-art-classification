@@ -1,5 +1,5 @@
 
-"""Simple application that performs a query with BigQuery."""
+""" Query the BigQuery public table for the Metropolitan Art. """
 
 import uuid
 
@@ -10,20 +10,16 @@ def query_metart():
     # Specify your Google Cloud project to connect to
     client = bigquery.Client(project="booming-flash-176918")
 
-    query_job = client.run_async_query(str(uuid.uuid4()), """
+    query_job = client.query("""
         #standardSQL
         SELECT department, culture, link_resource
         FROM `bigquery-public-data.the_met.objects`
         WHERE culture IS NOT NULL""")
 
-    query_job.begin()
-    query_job.result()  # Wait for job to complete.
+    results = query_job.result()  # Waits for job to complete.
 
-    destination_table = query_job.destination
-    destination_table.reload()
-    for row in destination_table.fetch_data():
-        print(row)
-
+    for row in results:
+        print(row[0:3])
 
 if __name__ == '__main__':
     query_metart()
