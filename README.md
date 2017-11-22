@@ -1,16 +1,16 @@
 # Train a TensorFlow model on Kubernetes to recognize art culture based on the collection from the Metropolitan Museum of Art
 
-In this developer journey, we will use Deep Learning to train an image classification model.
+In this Code Pattern, we will use Deep Learning to train an image classification model.
 The data comes from the art collection at the New York Metropolitan Museum of Art and the metadata from Google BigQuery.
 We will use the Inception model implemented in TensorFlow and we will run the training on a Kubernetes cluster.
 We will save the trained model and load it later to perform inference.
 To use the model, we provide as input a picture of a painting and the model will return the likely culture, for instance "Italian, Florence" art.
 The user can choose other attributes to classify the art collection, for instance author, time period, etc.
 Depending on the compute resources available, the user can choose the number of images to train, the number of classes to use, etc.
-In this journey, we will select a small set of images and a small number of classes to allow the training to complete within a reasonable amount of time.
+In this Code Pattern, we will select a small set of images and a small number of classes to allow the training to complete within a reasonable amount of time.
 With a large dataset, the training may take days or weeks.
 
-When the reader has completed this journey, they will understand how to:
+When the reader has completed this Code Pattern, they will understand how to:
 
 * Collect and process the data for Deep Learning in TensorFlow
 * Configure Distributed TensorFlow to run on a cluster of servers
@@ -21,21 +21,11 @@ When the reader has completed this journey, they will understand how to:
 ![](doc/source/images/architecture.png)
 
 
-## Prerequisites
-
-Create a Kubernetes cluster with either:
-* [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing using your own servers.
-* [IBM Bluemix Container Service](https://github.com/IBM/container-journey-template) to deploy in cloud.
-* [IBM Cloud Private](https://www.ibm.com/cloud-computing/products/ibm-cloud-private/) for either scenario above.
-
-The code here is tested against [Kubernetes Cluster from Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov).
-
-
 ## Flow
 
 1. Inspect the available attributes in the Google BigQuery database for the Met art collection
 2. Create the labeled dataset using the attribute selected
-3. Select a model for image classification from the set of available public models and deploy to IBM Bluemix
+3. Select a model for image classification from the set of available public models and deploy to IBM Cloud
 4. Run the training on Kubernetes, optionally using GPU if available
 5. Save the trained model and logs
 6. Visualize the training with TensorBoard
@@ -49,7 +39,7 @@ The code here is tested against [Kubernetes Cluster from Bluemix Container Servi
 * [Google metadata for Met Art collection](https://bigquery.cloud.google.com/dataset/bigquery-public-data:the_met?pli=1): A database containing metadata for the art collection at the New York Metropolitan Museum of Art
 * [Met Art collection](link): A collection of over 200,000 public art artifacts, including paintings, books, etc.
 * [Kubernetes cluster](https://kubernetes.io): An open-source system for orchestrating containers on a cluster of servers
-* [IBM Bluemix Container Service](https://console.ng.bluemix.net/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter): A public service from IBM that hosts users applications on Docker and Kubernetes
+* [IBM Cloud Container Service](https://console.ng.bluemix.net/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter): A public service from IBM that hosts users applications on Docker and Kubernetes
 
 
 ## Featured technologies
@@ -57,10 +47,20 @@ The code here is tested against [Kubernetes Cluster from Bluemix Container Servi
 * [TensorFlow](https://www.tensorflow.org): Deep Learning library
 * [TensorFlow models](https://github.com/tensorflow/models/tree/master/research/slim): Public models for Deep Learning
 * [Kubernetes](https://kubernetes.io): Container orchestration
-* [IBM Bluemix](https://bluemix.net): IBM Container service
+
 
 # Watch the Video
-[![](https://i.ytimg.com/vi/I-8xmMxo-RQ/2.jpg?time=1508459214123)](https://youtu.be/I-8xmMxo-RQ)
+[![](http://img.youtube.com/vi/I-8xmMxo-RQ/0.jpg)](https://www.youtube.com/watch?v=I-8xmMxo-RQ)
+
+
+# Prerequisites
+
+Create a Kubernetes cluster with either:
+* [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing using your own servers.
+* [IBM Cloud Container Service](https://github.com/IBM/container-journey-template) to deploy in cloud.
+* [IBM Cloud Private](https://www.ibm.com/cloud-computing/products/ibm-cloud-private/) for either scenario above.
+
+The code here is tested against [Kubernetes Cluster from IBM Cloud Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov).
 
 
 # Steps
@@ -116,8 +116,8 @@ Google BigQuery contains a collection of public databases that are useful for va
 in the data for the [art collection at the Metropolitan Museum](https://bigquery.cloud.google.com/table/bigquery-public-data:the_met.objects?pli=1)
 Check this [blog](https://cloud.google.com/blog/big-data/2017/08/when-art-meets-big-data-analyzing-200000-items-from-the-met-collection-in-bigquery)
 for more details.  Looking at the tables, we see quite a few attributes that can be used to label the art data. 
-For this journey, we will select the "culture" attribute, which describes the name of the culture where the art item
-is originated from, for instance "Italian, Florence".  Based on the example from this journey, you can choose any other
+For this Code Pattern, we will select the "culture" attribute, which describes the name of the culture where the art item
+is originated from, for instance "Italian, Florence".  Based on the example from this Code Pattern, you can choose any other
 attribute to label the art images.
 
 The file bigquery.py provides a simple python script that will query the Google BigQuery database.  
@@ -139,8 +139,8 @@ SELECT department, culture, link_resource
         LIMIT 200
 ```
 
-You can enter these strings on the Google BigQuery console to see the data. The journey also provides convenient script
-to query the attributes. First clone the journey git repository:
+You can enter these strings on the Google BigQuery console to see the data. The Code Pattern also provides convenient script
+to query the attributes. First clone this git repository:
 
 ```
 $ cd ~
@@ -515,6 +515,12 @@ $ kubectl delete -f infer-model.yaml # in case the infer pod already exists
 $ kubectl create -f infer-model.yaml
 $ kubectl logs infer-met-art-model
 ```
+# Learn more
+
+* **Artificial Intelligence Code Patterns**: Enjoyed this Code Pattern? Check out our other [AI Code Patterns](https://developer.ibm.com/code/technologies/artificial-intelligence/).
+* **AI and Data Code Pattern Playlist**: Bookmark our [playlist](https://www.youtube.com/playlist?list=PLzUbsvIyrNfknNewObx5N7uGZ5FKH0Fde) with all of our Code Pattern videos
+* **PowerAI**: Get started or get scaling, faster, with a software distribution for machine learning running on the Enterprise Platform for AI: [IBM Power Systems](https://www.ibm.com/ms-en/marketplace/deep-learning-platform)
+* **Kubernetes on IBM Cloud**: Deliver your apps with the combined the power of [Kubernetes and Docker on IBM Cloud](https://www.ibm.com/cloud-computing/bluemix/containers)
 
 # License
 [Apache 2.0](LICENSE)
