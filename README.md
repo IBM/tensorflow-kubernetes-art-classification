@@ -98,7 +98,7 @@ $ ./google-cloud-sdk/bin/gcloud init
 ```
 
 This will start the browser and request you to log into your gmail account and ask you to choose a project
-in Google cloud.
+in Google cloud.  Note the project id in this step so you can use it in the query script later.
 
 Authenticate for the client on your laptop by this command:
 
@@ -149,7 +149,14 @@ $ cd ~
 $ git clone https://github.com/IBM/tensorflow-kubernetes-art-classification.git
 ```
 
-The script to query Google BigQuery is bigquery.py. Edit the script to put in the appropriate SQL string and run the script:
+The script to query Google BigQuery is bigquery.py. Edit the script to put in the appropriate SQL string 
+above.  Update the project with the id from the previous step. 
+
+```
+client = bigquery.Client(project="change-to-your-project-id")
+```
+
+Run the script:
 
 ```
 $ cd tensorflow-kubernetes-art-classification
