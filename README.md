@@ -55,7 +55,9 @@ When the reader has completed this Code Pattern, they will understand how to:
 
 # Prerequisites
 
-Create a Kubernetes cluster with either:
+Install [TensorFlow](https://www.tensorflow.org/install) on your workstation.
+
+Create a Kubernetes cluster by one of the following methods:
 * [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing using your own servers.
 * [IBM Cloud Container Service](https://github.com/IBM/container-journey-template) to deploy in cloud.
 * [IBM Cloud Private](https://www.ibm.com/cloud-computing/products/ibm-cloud-private/) for either scenario above.
