@@ -1,5 +1,3 @@
-# Copyright 2017 IBM Corp. All Rights Reserved.
-
 import os
 import errno
 from HTMLParser import HTMLParser
@@ -18,8 +16,8 @@ class MetArtHTMLParser(HTMLParser):
         if tag == 'a':
             # Look for the keyword selectedOrDefaultDownload in an href
             for attr in attrs:
-                if attr[0] == 'href'
-                and 'selectedOrDefaultDownload' in attr[1]:
+                if (attr[0] == 'href' and
+                        'selectedOrDefaultDownload' in attr[1]):
                     art_url = attr[1].split("'")[1]
                     # Return the URL to download the original image
                     self.data = art_url
