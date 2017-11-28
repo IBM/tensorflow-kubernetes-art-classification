@@ -23,7 +23,7 @@ from google.cloud import bigquery
 
 def query_metart():
     # Specify your Google Cloud project to connect to
-    client = bigquery.Client(project="booming-flash-176918")
+    client = bigquery.Client(project="change-to-your-project-id")
 
     query_job = client.query("""
         #standardSQL
