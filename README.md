@@ -223,7 +223,7 @@ Run the script:
 ```
 $ cp tensorflow-kubernetes-art-classification/convert.py models/research/slim/convert.py
 $ cd models/research/slim
-$ python3 convert.py --dataset_dir="~/data"
+$ python convert.py --dataset_dir="~/data"
 ```
 
 The output will be in the directory `~/data`:
@@ -250,7 +250,7 @@ Occasionally, an image file is corrupted and the image processing step in the co
 You can scan the image collection first for corrupted files by running the command:
 
 ```sh
-$ python3 convert.py --dataset_dir="~/data" --check_image=True
+$ python convert.py --dataset_dir="~/data" --check_image=True
 ```
 
 Then the corrupted images can be removed from the dataset.
