@@ -1,3 +1,5 @@
+# Copyright 2017 IBM Corp. All Rights Reserved.
+
 import os
 import errno
 from HTMLParser import HTMLParser
