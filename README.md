@@ -117,12 +117,12 @@ requires a lot of resources and effort.
 Google BigQuery contains a collection of public databases that are useful for various purposes.  For our case, we are interested
 in the data for the [art collection at the Metropolitan Museum](https://bigquery.cloud.google.com/table/bigquery-public-data:the_met.objects?pli=1)
 Check this [blog](https://cloud.google.com/blog/big-data/2017/08/when-art-meets-big-data-analyzing-200000-items-from-the-met-collection-in-bigquery)
-for more details.  Looking at the tables, we see quite a few attributes that can be used to label the art data. 
+for more details.  Looking at the tables, we see quite a few attributes that can be used to label the art data.
 For this Code Pattern, we will select the "culture" attribute, which describes the name of the culture where the art item
 is originated from, for instance "Italian, Florence".  Based on the example from this Code Pattern, you can choose any other
 attribute to label the art images.
 
-The file bigquery.py provides a simple python script that will query the Google BigQuery database.  
+The file bigquery.py provides a simple python script that will query the Google BigQuery database.
 To get a list of the unique cultures, the SQL string is:
 
 ```sql
@@ -149,8 +149,8 @@ $ cd ~
 $ git clone https://github.com/IBM/tensorflow-kubernetes-art-classification.git
 ```
 
-The script to query Google BigQuery is bigquery.py. Edit the script to put in the appropriate SQL string 
-above.  Update the project with the id from the previous step. 
+The script to query Google BigQuery is bigquery.py. Edit the script to put in the appropriate SQL string
+above.  Update the project with the id from the previous step.
 
 ```
 client = bigquery.Client(project="change-to-your-project-id")
@@ -194,7 +194,7 @@ you can just unzip sample-dataset.tar.gz and use that as your downloaded data.
 
 ### 4. Convert data
 
-At this point, we will begin to use TensorFlow code to process the data.  
+At this point, we will begin to use TensorFlow code to process the data.
 Install TensorFlow on your environment following the [instructions from TensorFlow](https://www.tensorflow.org/install/).
 
 Clone the TensorFlow git repository containing a collection of public models:
@@ -206,7 +206,7 @@ $ git clone https://github.com/tensorflow/models.git
 
 We will use and extend the collection of image classification models in the directory `models/slim`.
 The code provided in this directory will allow you to process several different image datasets
-(CIFAR, Flowers, ImageNet) and you can choose from several advanced models to train.  
+(CIFAR, Flowers, ImageNet) and you can choose from several advanced models to train.
 To extend this code base to process our new dataset of art images, copy the following files into the
 directory:
 
@@ -246,7 +246,7 @@ Note that the data has been divided into two sets:  one for training and one for
 of data set aside for validation is 25% and this can be changed in the script convert.py.  The file
 `labels.txt` lists all the culture labels found in the images directory.
 
-Occasionally, an image file is corrupted and the image processing step in the conversion would fail.  
+Occasionally, an image file is corrupted and the image processing step in the conversion would fail.
 You can scan the image collection first for corrupted files by running the command:
 
 ```sh
