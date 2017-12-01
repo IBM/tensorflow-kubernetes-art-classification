@@ -14,8 +14,8 @@
 # ==============================================================================
 r"""Convert Arts data to TFRecords of TF-Example protos.
 
-This module reads the image files that make up the Arts data and creates 
-two TFRecord datasets: one for train and one for validation. 
+This module reads the image files that make up the Arts data and creates
+two TFRecord datasets: one for train and one for validation.
 Each TFRecord dataset is comprised of a set of TF-Example
 protocol buffers, each of which contain a single image and label.
 
@@ -234,6 +234,6 @@ def main(_):
   dataset_utils.write_label_file(labels_to_class_names, FLAGS.dataset_dir)
 
   print('\nFinished converting the Arts dataset!')
-  
+
 if __name__ == '__main__':
   tf.app.run()
