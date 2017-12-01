@@ -188,7 +188,7 @@ to create a list of images to download.
 $ python download.py
 ```
 
-> Note: If disk space is a concern to you, or you would like to use IBM Bluemix Kubernetes Service(Lite),
+> Note: If disk space is a concern to you, or you would like to use IBM Cloud Kubernetes Service(Lite),
 you can just unzip sample-dataset.tar.gz and use that as your downloaded data.
 
 
@@ -269,17 +269,17 @@ $ docker build -t my_image_name:v1 -f Dockerfile .
 ```
 
 Note that we include a small sample copy of the dataset in this image.  The reason is twofold. First, shared
-filesystem is not available for the free Bluemix account.  In normal practice, the dataset is too large to copy
+filesystem is not available for the free IBM Cloud account.  In normal practice, the dataset is too large to copy
 into the image and you would keep the dataset in a shared filesystem such as SoftLayer NFS. When a pod is started,
 the shared filesystem would be mounted so that the dataset is available to all the pods. Second, the computation
-resource provided with the free Bluemix account is not sufficient to run the training within a reasonable amount of
+resource provided with the free IBM Cloud account is not sufficient to run the training within a reasonable amount of
 time. In practice, you would use a larger dataset and allocate sufficient resources such as multiple CPU cores and
 GPU. Depending on the amount of computation resources, the training can run for days or over a week.
 
 Next follow these [instructions](https://console.bluemix.net/docs/containers/cs_cluster.html#bx_registry_other) to:
-  1. Create a namespace in Bluemix Container Registry and upload the image to this namespace
+  1. Create a namespace in IBM Cloud Container Registry and upload the image to this namespace
 	2. Create a non-expiring registry token
-	3. Create a Kubernetes secret to store the Bluemix token information
+	3. Create a Kubernetes secret to store the IBM Cloud token information
 
 
 ### 6. Deploy training
