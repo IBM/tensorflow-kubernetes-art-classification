@@ -35,9 +35,9 @@ When the reader has completed this Code Pattern, they will understand how to:
 ## Included components
 
 * [TensorFlow](http://www.tensorflow.org): An open-source library for implementing Deep Learning models
-* [Image classification models](https://github.com/tensorflow/models/tree/master/slim): An implementation of the Inception neural network for image classification
-* [Google metadata for Met Art collection](https://bigquery.cloud.google.com/dataset/bigquery-public-data:the_met?pli=1): A database containing metadata for the art collection at the New York Metropolitan Museum of Art
-* [Met Art collection](link): A collection of over 200,000 public art artifacts, including paintings, books, etc.
+* [Image classification models](https://github.com/tensorflow/models/tree/master/research/slim): A set of models for image classification implemented using the TensorFlow Slim high level API. 
+* [Google metadata for Met Art collection](https://bigquery.cloud.google.com/dataset/bigquery-public-data:the_met?pli=1): A database containing metadata for over 200,000 items from the art collection at the New York Metropolitan Museum of Art
+* [Met Art collection](https://metmuseum.org): The museum hosts a collection of over 450,000 public art artifacts, including paintings, books, etc.
 * [Kubernetes cluster](https://kubernetes.io): An open-source system for orchestrating containers on a cluster of servers
 * [IBM Cloud Container Service](https://console.ng.bluemix.net/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter): A public service from IBM that hosts users applications on Docker and Kubernetes
 
@@ -530,6 +530,15 @@ $ kubectl logs infer-met-art-model
 * **AI and Data Code Pattern Playlist**: Bookmark our [playlist](https://www.youtube.com/playlist?list=PLzUbsvIyrNfknNewObx5N7uGZ5FKH0Fde) with all of our Code Pattern videos
 * **PowerAI**: Get started or get scaling, faster, with a software distribution for machine learning running on the Enterprise Platform for AI: [IBM Power Systems](https://www.ibm.com/ms-en/marketplace/deep-learning-platform)
 * **Kubernetes on IBM Cloud**: Deliver your apps with the combined the power of [Kubernetes and Docker on IBM Cloud](https://www.ibm.com/cloud-computing/bluemix/containers)
+
+# Links
+* [IBM Cloud Container Service](https://console.ng.bluemix.net/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter): A public service from IBM that hosts users applications on Docker and Kubernetes
+* [TensorFlow](http://www.tensorflow.org): An open-source library for implementing Deep Learning models
+* [Kubernetes cluster](https://kubernetes.io): An open-source system for orchestrating containers on a cluster of servers
+* [New York Metropolitan Museum of Art](https://metmuseum.org): The museum hosts a collection of over 450,000 public art artifacts, including paintings, books, etc.
+* [Google metadata for Met Art collection](https://bigquery.cloud.google.com/dataset/bigquery-public-data:the_met?pli=1): A database containing metadata for over 200,000 items from the art collection at the New York Metropolitan Museum of Art
+* [Google BigQuery](https://bigquery.cloud.google.com): A web service that provides interactive analysis of massive datasets
+* [Image classification models](https://github.com/tensorflow/models/tree/master/research/slim): A set of models for image classification implemented using the TensorFlow Slim high level API. 
 
 # License
 [Apache 2.0](LICENSE)
