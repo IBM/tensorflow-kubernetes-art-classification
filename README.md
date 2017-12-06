@@ -315,8 +315,8 @@ spec:
   - name: model-logs
     persistentVolumeClaim:
       claimName: met-art-logs
-	imagePullSecrets:
-	- name: bluemix-secret
+  imagePullSecrets:
+  - name: bluemix-secret
   restartPolicy: Never
 ```
 
