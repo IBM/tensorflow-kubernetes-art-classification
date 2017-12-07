@@ -35,7 +35,7 @@ When the reader has completed this Code Pattern, they will understand how to:
 ## Included components
 
 * [TensorFlow](http://www.tensorflow.org): An open-source library for implementing Deep Learning models
-* [Image classification models](https://github.com/tensorflow/models/tree/master/research/slim): A set of models for image classification implemented using the TensorFlow Slim high level API. 
+* [Image classification models](https://github.com/tensorflow/models/tree/master/research/slim): A set of models for image classification implemented using the TensorFlow Slim high level API.
 * [Google metadata for Met Art collection](https://bigquery.cloud.google.com/dataset/bigquery-public-data:the_met?pli=1): A database containing metadata for over 200,000 items from the art collection at the New York Metropolitan Museum of Art
 * [Met Art collection](https://metmuseum.org): The museum hosts a collection of over 450,000 public art artifacts, including paintings, books, etc.
 * [Kubernetes cluster](https://kubernetes.io): An open-source system for orchestrating containers on a cluster of servers
@@ -145,7 +145,7 @@ You can enter these strings on the Google BigQuery console to see the data. The 
 to query the attributes. First clone this git repository:
 
 ```
-$ cd ~
+$ cd /your_home_directory
 $ git clone https://github.com/IBM/tensorflow-kubernetes-art-classification.git
 ```
 
@@ -200,7 +200,7 @@ Install TensorFlow on your environment following the [instructions from TensorFl
 Clone the TensorFlow git repository containing a collection of public models:
 
 ```
-$ cd ~
+$ cd /your_home_directory
 $ git clone https://github.com/tensorflow/models.git
 ```
 
@@ -217,16 +217,16 @@ $ cp tensorflow-kubernetes-art-classification/arts.py models/research/slim/datas
 
 We will convert the raw images into the TFRecord format that the TensorFlow code will use.
 To convert the art dataset, put the directories of downloaded pictures in a directory named `met_art`,
-for instance `~/data/met_art`.
+for instance `/your_home_directory/data/met_art`.
 Run the script:
 
 ```
 $ cp tensorflow-kubernetes-art-classification/convert.py models/research/slim/convert.py
 $ cd models/research/slim
-$ python convert.py --dataset_dir="~/data"
+$ python convert.py --dataset_dir="/your_home_directory/data"
 ```
 
-The output will be in the directory `~/data`:
+The output will be in the directory `/your_home_directory/data`:
 
 ```
 arts_train_00000-of-00005.tfrecord
@@ -250,7 +250,7 @@ Occasionally, an image file is corrupted and the image processing step in the co
 You can scan the image collection first for corrupted files by running the command:
 
 ```sh
-$ python convert.py --dataset_dir="~/data" --check_image=True
+$ python convert.py --dataset_dir="/your_home_directory/data" --check_image=True
 ```
 
 Then the corrupted images can be removed from the dataset.
@@ -261,11 +261,11 @@ Then the corrupted images can be removed from the dataset.
 To deploy the pod, you will need to create an image containing the TensorFlow code by running the command:
 
 ```
-$ cd ~/tensorflow-kubernetes-art-classification
+$ cd /your_home_directory/tensorflow-kubernetes-art-classification
 $ mkdir data
-$ cp ~/data/*.tfrecord data/.
-$ cp ~/data/labels.txt data/.
-$ docker build -t my_image_name:v1 -f Dockerfile .
+$ cp /your_home_directory/data/*.tfrecord data/.
+$ cp /your_home_directory/data/labels.txt data/.
+$ docker build -t your_image_name:v1 -f Dockerfile .
 ```
 
 Note that we include a small sample copy of the dataset in this image.  The reason is twofold. First, shared
@@ -322,12 +322,12 @@ spec:
 
 ```sh
 # For Mac OS
-$ sed -i '.original' 's/registry.ng.bluemix.net\/tf_ns\/met-art:v1/registry.<region>.bluemix.net\/<my_namespace>\/<my_image>:<tag>/' train-model.yaml
-$ sed -i '.original' 's/bluemix-secret/<my_token>/' train-model.yaml
+$ sed -i '.original' 's/registry.ng.bluemix.net\/tf_ns\/met-art:v1/registry.<region>.bluemix.net\/<your_namespace>\/<your_image>:<tag>/' train-model.yaml
+$ sed -i '.original' 's/bluemix-secret/<your_token>/' train-model.yaml
 
 # For all other Linux platforms
-$ sed -i 's/registry.ng.bluemix.net\/tf_ns\/met-art:v1/registry.<region>.bluemix.net\/<my_namespace>\/<my_image>:<tag>/' train-model.yaml
-$ sed -i 's/bluemix-secret/<my_token>/' train-model.yaml
+$ sed -i 's/registry.ng.bluemix.net\/tf_ns\/met-art:v1/registry.<region>.bluemix.net\/<your_namespace>\/<your_image>:<tag>/' train-model.yaml
+$ sed -i 's/bluemix-secret/<your_token>/' train-model.yaml
 ```
 
 Deploy the pod with the following command:
@@ -538,7 +538,7 @@ $ kubectl logs infer-met-art-model
 * [New York Metropolitan Museum of Art](https://metmuseum.org): The museum hosts a collection of over 450,000 public art artifacts, including paintings, books, etc.
 * [Google metadata for Met Art collection](https://bigquery.cloud.google.com/dataset/bigquery-public-data:the_met?pli=1): A database containing metadata for over 200,000 items from the art collection at the New York Metropolitan Museum of Art
 * [Google BigQuery](https://bigquery.cloud.google.com): A web service that provides interactive analysis of massive datasets
-* [Image classification models](https://github.com/tensorflow/models/tree/master/research/slim): A set of models for image classification implemented using the TensorFlow Slim high level API. 
+* [Image classification models](https://github.com/tensorflow/models/tree/master/research/slim): A set of models for image classification implemented using the TensorFlow Slim high level API.
 
 # License
 [Apache 2.0](LICENSE)
