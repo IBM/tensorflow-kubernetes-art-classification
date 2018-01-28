@@ -89,7 +89,7 @@ $ pip install --upgrade google-cloud-bigquery
 
 Install the [Google Cloud SDK](https://cloud.google.com/sdk/docs/) on your laptop.
 
-> For example, on the Mac, download and unzip ` google-cloud-sdk-168.0.0-darwin-x86_64.tar.gz`.
+> For example, on the Mac, download and unzip `google-cloud-sdk-168.0.0-darwin-x86_64.tar.gz`.
 
 Run the command:
 
@@ -118,11 +118,11 @@ Google BigQuery contains a collection of public databases that are useful for va
 in the data for the [art collection at the Metropolitan Museum](https://bigquery.cloud.google.com/table/bigquery-public-data:the_met.objects?pli=1)
 Check this [blog](https://cloud.google.com/blog/big-data/2017/08/when-art-meets-big-data-analyzing-200000-items-from-the-met-collection-in-bigquery)
 for more details.  Looking at the tables, we see quite a few attributes that can be used to label the art data.
-For this Code Pattern, we will select the "culture" attribute, which describes the name of the culture where the art item
+For this Code Pattern, we will select the `culture` attribute, which describes the name of the culture where the art item
 is originated from, for instance "Italian, Florence".  Based on the example from this Code Pattern, you can choose any other
 attribute to label the art images.
 
-The file bigquery.py provides a simple python script that will query the Google BigQuery database.
+The file `bigquery.py` provides a simple python script that will query the Google BigQuery database.
 To get a list of the unique cultures, the SQL string is:
 
 ```sql
@@ -149,7 +149,7 @@ $ cd /your_home_directory
 $ git clone https://github.com/IBM/tensorflow-kubernetes-art-classification.git
 ```
 
-The script to query Google BigQuery is bigquery.py. Edit the script to put in the appropriate SQL string
+The script to query Google BigQuery is `bigquery.py`. Edit the script to put in the appropriate SQL string
 above.  Update the project with the id from the previous step.
 
 ```
@@ -179,7 +179,7 @@ that we can use.  There are 4,259 unique labels for these items, although only 5
 would be useful for training a model.  If a particular culture has just a few art images, it's probably not enough
 to train the model.
 
-The script download.py is provided to build the raw labeled data.  It will read from the file arts-select.list,
+The script `download.py` is provided to build the raw labeled data.  It will read from the file `arts-select.list`,
 download the image source found in each line and place it in a directory named with the label.
 You can copy from the lines in the file `arts-all.list` into the file `arts-select.list` and edit as needed
 to create a list of images to download.
@@ -189,7 +189,7 @@ $ python download.py
 ```
 
 > Note: If disk space is a concern to you, or you would like to use IBM Cloud Kubernetes Service(Lite),
-you can just unzip sample-dataset.tar.gz and use that as your downloaded data.
+you can just unzip `sample-dataset.tar.gz` and use that as your downloaded data.
 
 
 ### 4. Convert data
@@ -243,7 +243,7 @@ labels.txt
 ```
 
 Note that the data has been divided into two sets:  one for training and one for validation.  The portion
-of data set aside for validation is 25% and this can be changed in the script convert.py.  The file
+of data set aside for validation is 25% and this can be changed in the script `convert.py`.  The file
 `labels.txt` lists all the culture labels found in the images directory.
 
 Occasionally, an image file is corrupted and the image processing step in the conversion would fail.
@@ -468,7 +468,7 @@ spec:
 ```
 
 Update `infer-model.yaml` file with your docker image name and secret name just like in step 6.
-In addition, replace the image_url with your choice of art image.
+In addition, replace the `image_url` with your choice of art image.
 
 Deploy the pod with the following command:
 
@@ -500,7 +500,7 @@ $ tar xvfz inception-v3-2k-metart-images.tar.gz
 $ exit
 ```
 
-Next update infer-model.yaml with this checkpoint:
+Next update `infer-model.yaml` with this checkpoint:
 
 ```yaml
 command:
@@ -529,7 +529,7 @@ $ kubectl logs infer-met-art-model
 * **Artificial Intelligence Code Patterns**: Enjoyed this Code Pattern? Check out our other [AI Code Patterns](https://developer.ibm.com/code/technologies/artificial-intelligence/).
 * **AI and Data Code Pattern Playlist**: Bookmark our [playlist](https://www.youtube.com/playlist?list=PLzUbsvIyrNfknNewObx5N7uGZ5FKH0Fde) with all of our Code Pattern videos
 * **PowerAI**: Get started or get scaling, faster, with a software distribution for machine learning running on the Enterprise Platform for AI: [IBM Power Systems](https://www.ibm.com/ms-en/marketplace/deep-learning-platform)
-* **Kubernetes on IBM Cloud**: Deliver your apps with the combined the power of [Kubernetes and Docker on IBM Cloud](https://www.ibm.com/cloud-computing/bluemix/containers)
+* **Kubernetes on IBM Cloud**: Deliver your apps with the combined power of [Kubernetes and Docker on IBM Cloud](https://www.ibm.com/cloud-computing/bluemix/containers)
 
 # Links
 * [IBM Cloud Container Service](https://console.ng.bluemix.net/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter): A public service from IBM that hosts users applications on Docker and Kubernetes
