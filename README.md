@@ -1,4 +1,5 @@
 # Train a TensorFlow model on Kubernetes to recognize art culture based on the collection from the Metropolitan Museum of Art
+*Read this in other languages: [中国](README-cn.md).*
 
 In this Code Pattern, we will use Deep Learning to train an image classification model.
 The data comes from the art collection at the New York Metropolitan Museum of Art and the metadata from Google BigQuery.
