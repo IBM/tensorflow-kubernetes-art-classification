@@ -53,7 +53,7 @@ def get_split(split_name, dataset_dir, file_pattern=None, reader=None):
     reader: The TensorFlow reader type.
 
   Returns:
-    A `Dataset` namedtuple.
+    A `Dataset` named tuple.
 
   Raises:
     ValueError: if `split_name` is not a valid train/validation split.
