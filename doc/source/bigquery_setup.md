@@ -36,6 +36,6 @@ Unpack this and run the command:
 
 ## 3. Run a query
 
-Modify the script bigquery.py as appropriate and launch:
+Modify the script `bigquery.py` as appropriate and launch:
 
 	python bigquery.py
