@@ -21,7 +21,7 @@ import uuid, os
 from google.cloud import bigquery
 
 # Specify path to generated environment variable json for project 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "#path_to_json_credential_file"
+# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "#path_to_json_credential_file"
 
 def query_metart():
     # Specify your Google Cloud project to connect to
