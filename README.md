@@ -150,7 +150,7 @@ $ cd /your_home_directory
 $ git clone https://github.com/IBM/tensorflow-kubernetes-art-classification.git
 ```
 
-The script to query Google BigQuery is `bigquery.py`. Edit the script to put the file path to the generated service account credentials done in the previous step of installing the client on your laptop to interact with Google BigQuery [instructions](https://cloud.google.com/bigquery/docs/reference/libraries).
+The script to query Google BigQuery is `bigquery.py`. If the script fails to find the path to your credentials, you can place the file path to the generated service account credentials done in the previous step of installing the client on your laptop to interact with Google BigQuery [instructions](https://cloud.google.com/bigquery/docs/reference/libraries).
 
 ```
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "#path_to_json_credential_file"
