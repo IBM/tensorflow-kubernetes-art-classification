@@ -39,7 +39,7 @@
 * [Google metadata for Met Art collection](https://bigquery.cloud.google.com/dataset/bigquery-public-data:the_met?pli=1): 뉴욕 메트로폴리탄 미술관에 있는 예술 작품 컬렉션의 200,000개 이상의 항목에 대한 메타 데이터가 저장된 데이터베이스
 * [Met Art collection](https://metmuseum.org): 이 미술관에는 회화, 서적 등을 포함하는 45만개 이상의 공공 미술품이 있습니다.
 * [Kubernetes cluster](https://kubernetes.io): 서버 클러스터에서 컨테이너를 관리하는 오픈 소스 시스템
-* [IBM Cloud Container Service](https://console.ng.bluemix.net/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter): Docker와 Kubernetes에서 사용자 애플리케이션을을 호스팅하는 IBM의 퍼블릭 클라우드 서비스
+* [IBM Cloud Container Service](https://cloud.ibm.com/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter): Docker와 Kubernetes에서 사용자 애플리케이션을을 호스팅하는 IBM의 퍼블릭 클라우드 서비스
 
 
 ## 주요 기술
@@ -62,7 +62,7 @@
 * 클라우드에 배포 : [IBM Cloud Container Service](https://github.com/IBM/container-journey-template)
 * 로컬 또는 클라우드에서 선택적으로 사용 : [IBM Cloud Private](https://www.ibm.com/cloud-computing/products/ibm-cloud-private/)
 
-이 코든는 [IBM Cloud Container Service의 쿠버네티스 클러스터](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov)에서 테스트 했습니다.
+이 코든는 [IBM Cloud Container Service의 쿠버네티스 클러스터](https://cloud.ibm.com/docs/containers/cs_ov.html#cs_ov)에서 테스트 했습니다.
 
 # Steps
 1. [구글 BigQuery 등록 및 개발 환경 셋업](#1-개발-환경-셋업)
@@ -242,7 +242,7 @@ $ docker build -t your_image_name:v1 -f Dockerfile .
 
 우리가 이 닥커 이미지에 적은 양의 데이터 셋만을 사용한다는 점을 기억하십시오. 이렇게 하는 이유는 두가지 측면인데 첫번째는 IBM Lite 계정으로는 공유 파일 시스템을 사용할 수 없습니다. 일반적으로 데이터셋은 닥커 이미지로 복사하기에는 너무 큽니다. 그렇기 때문에 데이터셋을 소프트레이어 NFS와 같은 공유 파일 시스템에 두어야 합니다. Pod가 시작될 때, 공유 파일시스템을 마운트 해서 데이터셋이 모든 pod에서 사용될 수 있도록 합니다. 두번째 측면은 IBM Cloud Lite 계정에 제공되는 컴퓨팅 리소스가 합리적인 시간 내에 트레이닝을 실행하기에 충분하지 않습니다. 실제 상황에서는 더 큰 데이터셋을 사용하고 여러 CPU 코어 및 GPU와 같이 충분한 리소스를 할당해야 합니다. 컴퓨팅 리소스의 양에 따라 트레이닝은 몇일이 걸릴 수도 몇주가 걸릴 수도 있습니다.
 
-다음 단계로 이 [설명](https://console.bluemix.net/docs/containers/cs_cluster.html#bx_registry_other)을 따르십시오.
+다음 단계로 이 [설명](https://cloud.ibm.com/docs/containers/cs_cluster.html#bx_registry_other)을 따르십시오.
   1. IBM Cloud Container Registry에 네임스페이스를 생성하고 이미지를 이 네임스페이스로 업로드 합니다.
   2. 만료되지 않는 레지스트리 토큰을 생성합니다.
   3. IBM Cloud 토큰 정보를 저장하기 위해 쿠버네티스 시크릿을 생성합니다.
@@ -485,7 +485,7 @@ $ kubectl logs infer-met-art-model
 * **IBM Cloud의 쿠버네티스**: [IBM Cloud에서 쿠버네티스와 Docker](https://www.ibm.com/cloud-computing/bluemix/containers)의 힘을 활용하여 애플리케이션을 배포하십시오.
 
 # 링크 (영문)
-* [IBM Cloud 컨테이너 서비스](https://console.ng.bluemix.net/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter): 사용자 애플리케이션을 Docker와 쿠버네티스에서 호스팅할 수 있는 IBM의 Public 서비스
+* [IBM Cloud 컨테이너 서비스](https://cloud.ibm.com/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter): 사용자 애플리케이션을 Docker와 쿠버네티스에서 호스팅할 수 있는 IBM의 Public 서비스
 * [텐서플로우](http://www.tensorflow.org): 딥러닝 모델을 구현한 오픈 소스 라이브러리
 * [쿠버네티스 클러스터](https://kubernetes.io): 서버 클러스터에서 컨테이너를 관리하기 위한 오픈 소스 시스템
 * [뉴욕 메트로폴리탄 미술관](https://metmuseum.org): 이 미술관은 그림, 책 등 450,000개 이상의 공공 예술품을 다양하게 전시하고 있습니다.

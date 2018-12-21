@@ -40,7 +40,7 @@ When the reader has completed this Code Pattern, they will understand how to:
 * [Google metadata for Met Art collection](https://bigquery.cloud.google.com/dataset/bigquery-public-data:the_met?pli=1): A database containing metadata for over 200,000 items from the art collection at the New York Metropolitan Museum of Art
 * [Met Art collection](https://metmuseum.org): The museum hosts a collection of over 450,000 public art artifacts, including paintings, books, etc.
 * [Kubernetes cluster](https://kubernetes.io): An open-source system for orchestrating containers on a cluster of servers
-* [IBM Cloud Container Service](https://console.ng.bluemix.net/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter): A public service from IBM that hosts users applications on Docker and Kubernetes
+* [IBM Cloud Container Service](https://cloud.ibm.com/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter): A public service from IBM that hosts users applications on Docker and Kubernetes
 
 
 ## Featured technologies
@@ -63,7 +63,7 @@ Create a Kubernetes cluster by one of the following methods:
 * [IBM Cloud Container Service](https://github.com/IBM/container-journey-template) to deploy in cloud.
 * [IBM Cloud Private](https://www.ibm.com/cloud-computing/products/ibm-cloud-private/) for either scenario above.
 
-The code here is tested against [Kubernetes Cluster from IBM Cloud Container Service](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov).
+The code here is tested against [Kubernetes Cluster from IBM Cloud Container Service](https://cloud.ibm.com/docs/containers/cs_ov.html#cs_ov).
 
 
 # Steps
@@ -282,7 +282,7 @@ resource provided with the free IBM Cloud account is not sufficient to run the t
 time. In practice, you would use a larger dataset and allocate sufficient resources such as multiple CPU cores and
 GPU. Depending on the amount of computation resources, the training can run for days or over a week.
 
-Next follow these [instructions](https://console.bluemix.net/docs/containers/cs_cluster.html#bx_registry_other) to:
+Next follow these [instructions](https://cloud.ibm.com/docs/containers/cs_cluster.html#bx_registry_other) to:
   1. Create a namespace in IBM Cloud Container Registry and upload the image to this namespace
 	2. Create a non-expiring registry token
 	3. Create a Kubernetes secret to store the IBM Cloud token information
@@ -538,7 +538,7 @@ $ kubectl logs infer-met-art-model
 * **Kubernetes on IBM Cloud**: Deliver your apps with the combined power of [Kubernetes and Docker on IBM Cloud](https://www.ibm.com/cloud-computing/bluemix/containers)
 
 # Links
-* [IBM Cloud Container Service](https://console.ng.bluemix.net/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter): A public service from IBM that hosts users applications on Docker and Kubernetes
+* [IBM Cloud Container Service](https://cloud.ibm.com/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter): A public service from IBM that hosts users applications on Docker and Kubernetes
 * [TensorFlow](http://www.tensorflow.org): An open-source library for implementing Deep Learning models
 * [Kubernetes cluster](https://kubernetes.io): An open-source system for orchestrating containers on a cluster of servers
 * [New York Metropolitan Museum of Art](https://metmuseum.org): The museum hosts a collection of over 450,000 public art artifacts, including paintings, books, etc.
