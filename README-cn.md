@@ -46,7 +46,7 @@
 * [用于大都会艺术博物馆藏品的 Google 元数据](https://bigquery.cloud.google.com/dataset/bigquery-public-data:the_met?pli=1)：包含纽约大都会艺术博物馆超过 200,000 件艺术藏品的元数据的数据库
 * [大都会艺术博物馆藏品](https://metmuseum.org)：该博物馆收藏有超过 450,000 件公共艺术品，包括油画、书籍等。
 * [Kubernetes 集群](https://kubernetes.io)：用于在服务器集群上编排容器的开源系统
-* [IBM Cloud Container Service](https://console.ng.bluemix.net/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter)：来自 IBM 的公共服务，可在 Docker 和 Kubernetes 上托管用户应用程序
+* [IBM Cloud Container Service](https://cloud.ibm.com/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter)：来自 IBM 的公共服务，可在 Docker 和 Kubernetes 上托管用户应用程序
 
 
 ## 特色技术
@@ -69,7 +69,7 @@
 * [IBM Cloud Container Service](https://github.com/IBM/container-journey-template)：用于在云端部署。
 * [IBM Cloud Private](https://www.ibm.com/cloud-computing/products/ibm-cloud-private/)：用于以上任一场景。
 
-这里的代码针对 [来自 IBM Cloud Container Service 的 Kubernetes 集群](https://console.ng.bluemix.net/docs/containers/cs_ov.html#cs_ov) 进行了测试。
+这里的代码针对 [来自 IBM Cloud Container Service 的 Kubernetes 集群](https://cloud.ibm.com/docs/containers/cs_ov.html#cs_ov) 进行了测试。
 
 
 # 步骤
@@ -291,7 +291,7 @@ $ docker build -t your_image_name:v1 -f Dockerfile .
 运行训练过程。在实际操作中，您将使用更大的数据集，并分配足够的资源，例如，多个 CPU 核心和
 GPU。根据计算资源的数量，训练过程可能会运行几天，甚至会超过一周时间。
 
-接下来，遵循这些[指示信息](https://console.bluemix.net/docs/containers/cs_cluster.html#bx_registry_other) 来完成以下操作：
+接下来，遵循这些[指示信息](https://cloud.ibm.com/docs/containers/cs_cluster.html#bx_registry_other) 来完成以下操作：
 
 	1.在 IBM Cloud Container Registry 中创建一个名字空间，并将图像上传至此名称空间
   
@@ -551,7 +551,7 @@ $ kubectl logs infer-met-art-model
 * **IBM Cloud 上的 Kubernetes**：为您的应用程序带来 [IBM Cloud 上的 Kubernetes 和 Docker](https://www.ibm.com/cloud-computing/bluemix/containers) 的组合力量
 
 # 链接
-* [IBM Cloud Container Service](https://console.ng.bluemix.net/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter)：来自 IBM 的公共服务，可在 Docker 和 Kubernetes 上托管用户应用程序
+* [IBM Cloud Container Service](https://cloud.ibm.com/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter)：来自 IBM 的公共服务，可在 Docker 和 Kubernetes 上托管用户应用程序
 * [TensorFlow](http://www.tensorflow.org)：用于实现深度学习模型的开源库
 * [Kubernetes 集群](https://kubernetes.io)：用于在服务器集群上编排容器的开源系统
 * [纽约大都会艺术博物馆](https://metmuseum.org)：该博物馆收藏有超过 450,000 件公共艺术品，包括油画、书籍等。
