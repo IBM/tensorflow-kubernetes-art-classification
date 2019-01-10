@@ -35,7 +35,7 @@ When the reader has completed this Code Pattern, they will understand how to:
 
 ## Included components
 
-* [TensorFlow](http://www.tensorflow.org): An open-source library for implementing Deep Learning models
+* [TensorFlow](https://www.tensorflow.org/): An open-source library for implementing Deep Learning models
 * [Image classification models](https://github.com/tensorflow/models/tree/master/research/slim): A set of models for image classification implemented using the TensorFlow Slim high level API.
 * [Google metadata for Met Art collection](https://bigquery.cloud.google.com/dataset/bigquery-public-data:the_met?pli=1): A database containing metadata for over 200,000 items from the art collection at the New York Metropolitan Museum of Art
 * [Met Art collection](https://metmuseum.org): The museum hosts a collection of over 450,000 public art artifacts, including paintings, books, etc.
@@ -51,7 +51,7 @@ When the reader has completed this Code Pattern, they will understand how to:
 
 
 # Watch the Video
-[![](http://img.youtube.com/vi/I-8xmMxo-RQ/0.jpg)](https://www.youtube.com/watch?v=I-8xmMxo-RQ)
+[![](https://img.youtube.com/vi/I-8xmMxo-RQ/0.jpg)](https://www.youtube.com/watch?v=I-8xmMxo-RQ)
 
 
 # Prerequisites
@@ -59,9 +59,9 @@ When the reader has completed this Code Pattern, they will understand how to:
 Install [TensorFlow](https://www.tensorflow.org/install) on your workstation.
 
 Create a Kubernetes cluster by one of the following methods:
-* [Minikube](https://kubernetes.io/docs/getting-started-guides/minikube) for local testing using your own servers.
+* [Minikube](https://kubernetes.io/docs/setup/minikube/) for local testing using your own servers.
 * [IBM Cloud Container Service](https://github.com/IBM/container-journey-template) to deploy in cloud.
-* [IBM Cloud Private](https://www.ibm.com/cloud-computing/products/ibm-cloud-private/) for either scenario above.
+* [IBM Cloud Private](https://www.ibm.com/cloud/private) for either scenario above.
 
 The code here is tested against [Kubernetes Cluster from IBM Cloud Container Service](https://cloud.ibm.com/docs/containers/cs_ov.html#cs_ov).
 
@@ -491,7 +491,7 @@ $ kubectl logs infer-met-art-model
 In the training we have run above, we used a very small dataset for illustration purposes because
 of the very limited resources provided with the Lite version of the Kubernetes cluster. Therefore
 the trained model only covers 5 culture categories and will not be very accurate. For this step,
-you can use our [checkpoint](https://ibm.box.com/s/wyzl1k2tz1nosrf44mj20cmlruy7gsut) from a previous training that covers
+you can use our [checkpoint](https://ibm.ent.box.com/s/wyzl1k2tz1nosrf44mj20cmlruy7gsut) from a previous training that covers
 600 culture categories. The accuracy at this checkpoint is 66%.
 If you would like to use our checkpoint to run inference please download it from the above link
 and then copy it to the Kubernetes persistent volume:
@@ -532,14 +532,14 @@ $ kubectl logs infer-met-art-model
 ```
 # Learn more
 
-* **Artificial Intelligence Code Patterns**: Enjoyed this Code Pattern? Check out our other [AI Code Patterns](https://developer.ibm.com/code/technologies/artificial-intelligence/).
+* **Artificial Intelligence Code Patterns**: Enjoyed this Code Pattern? Check out our other [AI Code Patterns](https://developer.ibm.com/technologies/artificial-intelligence/).
 * **AI and Data Code Pattern Playlist**: Bookmark our [playlist](https://www.youtube.com/playlist?list=PLzUbsvIyrNfknNewObx5N7uGZ5FKH0Fde) with all of our Code Pattern videos
 * **PowerAI**: Get started or get scaling, faster, with a software distribution for machine learning running on the Enterprise Platform for AI: [IBM Power Systems](https://www.ibm.com/ms-en/marketplace/deep-learning-platform)
-* **Kubernetes on IBM Cloud**: Deliver your apps with the combined power of [Kubernetes and Docker on IBM Cloud](https://www.ibm.com/cloud-computing/bluemix/containers)
+* **Kubernetes on IBM Cloud**: Deliver your apps with the combined power of [Kubernetes and Docker on IBM Cloud](https://www.ibm.com/cloud/container-service)
 
 # Links
 * [IBM Cloud Container Service](https://cloud.ibm.com/docs/containers/container_index.html?cm_sp=dw-bluemix-_-code-_-devcenter): A public service from IBM that hosts users applications on Docker and Kubernetes
-* [TensorFlow](http://www.tensorflow.org): An open-source library for implementing Deep Learning models
+* [TensorFlow](https://www.tensorflow.org/): An open-source library for implementing Deep Learning models
 * [Kubernetes cluster](https://kubernetes.io): An open-source system for orchestrating containers on a cluster of servers
 * [New York Metropolitan Museum of Art](https://metmuseum.org): The museum hosts a collection of over 450,000 public art artifacts, including paintings, books, etc.
 * [Google metadata for Met Art collection](https://bigquery.cloud.google.com/dataset/bigquery-public-data:the_met?pli=1): A database containing metadata for over 200,000 items from the art collection at the New York Metropolitan Museum of Art
