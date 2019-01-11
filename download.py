@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import errno
 from HTMLParser import HTMLParser
@@ -34,7 +35,7 @@ for item in arts_to_download:
     pick = item.split("',")
     culture = pick[1].replace(" u'", "")
     webpage = pick[2].replace(" u'", "").replace("')", "")
-    print culture, webpage
+    print(culture, webpage)
 
     # Download the webpage and parse for the image URL
     response = urllib2.urlopen(webpage)
@@ -61,9 +62,9 @@ for item in arts_to_download:
         # Convert the url to the %-encoded format since it may be
         # in other format like utf-8
         image_url = urllib2.quote(myparser.data.encode(encoding), '/:')
-        print "image to download:  ", image_url
+        print("image to download:  ", image_url)
         response = urllib2.urlopen(image_url)
         image_file.write(response.read())
         image_file.close()
     except:
-        print "Error, skipping url: ", webpage
+        print("Error, skipping url: ", webpage)
